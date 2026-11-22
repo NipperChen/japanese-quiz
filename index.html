@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="日文練習">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<title>日文練習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #E8864A;
+  --orange-bg: #FFF3EB;
+  --orange-border: #F5C9A8;
+  --green: #2ABF7E;
+  --green-bg: #E8F9F2;
+  --red: #E05252;
+  --red-bg: #FEF0F0;
+  --text: #1A1A1A;
+  --text2: #555;
+  --muted: #999;
+  --gray: #F4F4F4;
+  --gray2: #E0E0E0;
+  --card-bg: #fff;
+  --bg: #F7F7F7;
+  --nav-h: 64px;
+  --safe-b: env(safe-area-inset-bottom);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--text)}
+body{min-height:100dvh;background:var(--bg)}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100dvh;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 8px)}
+.page.active{display:block}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:#fff;border-top:1px solid var(--gray2);display:flex;padding-bottom:var(--safe-b);z-index:200}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;font-size:11px;color:var(--muted);font-family:inherit;cursor:pointer;padding:8px 0}
+.nav-btn.active{color:var(--orange)}
+.nav-btn .nav-icon{font-size:22px;line-height:1}
+
+/* ── HOME PAGE ── */
+.home-header{background:#fff;padding:52px 20px 20px;border-bottom:1px solid var(--gray2)}
+.home-title{font-size:26px;font-weight:700;line-height:1.2}
+.home-title span{color:var(--orange)}
+.home-subtitle{font-size:13px;color:var(--muted);margin-top:4px}
+.home-body{padding:16px 16px 0}
+
+.stats-row{display:flex;gap:10px;margin-bottom:16px}
+.stat-card{flex:1;background:#fff;border-radius:14px;padding:14px 12px;border:1px solid var(--gray2)}
+.stat-num{font-size:26px;font-weight:700;line-height:1}
+.stat-num.orange{color:var(--orange)}
+.stat-num.green{color:var(--green)}
+.stat-label{font-size:11px;color:var(--muted);margin-top:3px}
+
+.section-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--text2);background:#fff;cursor:pointer;transition:all .15s;white-space:nowrap}
+.filter-chip.sel{background:var(--orange-bg);color:var(--orange);border-color:var(--orange)}
+
+.start-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:16px;padding:16px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(232,134,74,.4);letter-spacing:.03em}
+.start-btn:active{transform:scale(.97)}
+
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.meta-info{font-size:11px;color:var(--muted)}
+
+.type-breakdown{background:#fff;border-radius:14px;border:1px solid var(--gray2);padding:14px 16px;margin-top:16px}
+.type-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--gray)}
+.type-row:last-child{border-bottom:none}
+.type-name{font-size:14px;font-weight:500}
+.type-count{font-size:13px;color:var(--muted)}
+.type-badge-sm{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-right:6px}
+.badge-fill{background:var(--orange-bg);color:var(--orange)}
+.badge-choice{background:#EEF0FF;color:#5B6BE8}
+.badge-tf{background:var(--green-bg);color:var(--green)}
+.badge-conj{background:#F3E8FF;color:#8B4CF5}
+.badge-order{background:#E6F4FF;color:#2B7CE8}
+
+/* ── QUIZ PAGE ── */
+.quiz-topbar{display:flex;align-items:center;justify-content:space-between;padding:52px 16px 12px;background:#fff;border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
+.quiz-back{background:none;border:none;font-size:16px;color:var(--text2);font-family:inherit;cursor:pointer;padding:6px 10px 6px 2px;font-weight:500}
+.quiz-progress{font-size:14px;font-weight:600;color:var(--text2)}
+.quiz-star{background:none;border:none;font-size:22px;cursor:pointer;padding:4px 2px 4px 10px;line-height:1}
+
+.progress-wrap{height:3px;background:var(--gray2)}
+.progress-fill{height:3px;background:var(--orange);transition:width .4s}
+
+.quiz-body{padding:16px}
+
+.q-badges{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.q-type-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
+.badge-type-fill{background:var(--orange-bg);color:var(--orange)}
+.badge-type-choice{background:#EEF0FF;color:#5B6BE8}
+.badge-type-tf{background:var(--green-bg);color:var(--green)}
+.badge-type-conj{background:#F3E8FF;color:#8B4CF5}
+.badge-type-order{background:#E6F4FF;color:#2B7CE8}
+.q-source{font-size:11px;color:var(--muted);padding:3px 9px;background:var(--gray);border-radius:99px}
+
+.q-card{background:#fff;border-radius:18px;padding:20px;border:1px solid var(--gray2);margin-bottom:16px}
+.q-category{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.q-text{font-size:17px;font-weight:500;line-height:1.6;color:var(--text)}
+.q-sentence{font-size:18px;font-weight:600;line-height:1.7;margin-top:8px;color:var(--text)}
+.blank{display:inline-block;min-width:52px;height:26px;border-bottom:2.5px solid var(--orange);text-align:center;vertical-align:middle;font-size:16px;font-weight:700;color:var(--orange);line-height:26px}
+.blank.filled{border-color:transparent;background:var(--orange-bg);border-radius:6px;padding:0 6px}
+.blank-hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* Answer areas */
+.chip-grid{display:flex;gap:10px;flex-wrap:wrap}
+.chip-opt{flex:1;min-width:calc(50% - 5px);background:#fff;border:2px solid var(--gray2);border-radius:12px;padding:13px 10px;font-size:17px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text)}
+.chip-opt:active:not(.locked){transform:scale(.95)}
+.chip-opt.selected{border-color:var(--orange);background:var(--orange-bg);color:var(--orange)}
+.chip-opt.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.chip-opt.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.chip-opt.locked{cursor:default}
+
+.choice-list{display:flex;flex-direction:column;gap:10px}
+.choice-opt{background:#fff;border:2px solid var(--gray2);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:500;text-align:left;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text);display:flex;align-items:center;gap:10px}
+.choice-opt:active:not(.locked){background:var(--gray)}
+.choice-letter{font-size:12px;font-weight:700;color:var(--muted);min-width:18px}
+.choice-opt.selected{border-color:var(--orange);background:var(--orange-bg)}
+.choice-opt.selected .choice-letter{color:var(--orange)}
+.choice-opt.correct{border-color:var(--green);background:var(--green-bg)}
+.choice-opt.correct .choice-letter{color:var(--green)}
+.choice-opt.wrong{border-color:var(--red);background:var(--red-bg)}
+.choice-opt.wrong .choice-letter{color:var(--red)}
+.choice-opt.reveal{border-color:var(--green);background:var(--green-bg)}
+.choice-opt.reveal .choice-letter{color:var(--green)}
+.choice-opt.locked{cursor:default}
+
+.tf-row{display:flex;gap:12px}
+.tf-btn{flex:1;border:2px solid var(--gray2);border-radius:16px;padding:20px 10px;font-size:32px;text-align:center;cursor:pointer;background:#fff;font-family:inherit;transition:all .15s}
+.tf-btn:active:not(.locked){transform:scale(.95)}
+.tf-label{font-size:13px;font-weight:600;color:var(--muted);display:block;margin-top:4px}
+.tf-btn.selected-t{border-color:var(--orange);background:var(--orange-bg)}
+.tf-btn.selected-t .tf-label{color:var(--orange)}
+.tf-btn.selected-f{border-color:var(--orange);background:var(--orange-bg)}
+.tf-btn.selected-f .tf-label{color:var(--orange)}
+.tf-btn.correct{border-color:var(--green);background:var(--green-bg)}
+.tf-btn.correct .tf-label{color:var(--green)}
+.tf-btn.wrong{border-color:var(--red);background:var(--red-bg)}
+.tf-btn.wrong .tf-label{color:var(--red)}
+.tf-btn.locked{cursor:default}
+
+/* Feedback */
+.feedback-card{background:#fff;border-radius:16px;border:2px solid var(--gray2);padding:16px;margin-top:0;display:none}
+.feedback-card.show{display:block}
+.feedback-card.correct-fb{border-color:var(--green)}
+.feedback-card.wrong-fb{border-color:var(--red)}
+.feedback-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.feedback-icon{font-size:20px}
+.feedback-result{font-size:15px;font-weight:700}
+.feedback-result.ok{color:var(--green)}
+.feedback-result.ng{color:var(--red)}
+.feedback-explain{font-size:13px;line-height:1.65;color:var(--text2);white-space:pre-line}
+
+.next-btn{width:100%;background:var(--text);color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;transition:transform .15s}
+.next-btn:active{transform:scale(.97)}
+.next-btn.orange-btn{background:var(--orange)}
+
+/* ── COMPLETE PAGE ── */
+.complete-wrap{padding:52px 20px 24px;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.complete-emoji{font-size:72px;line-height:1}
+.complete-title{font-size:24px;font-weight:700;text-align:center}
+.complete-score{font-size:52px;font-weight:700;color:var(--orange);text-align:center;line-height:1}
+.complete-denom{font-size:20px;color:var(--muted);font-weight:500}
+.complete-pct{font-size:16px;color:var(--text2);font-weight:600}
+.complete-breakdown{background:#fff;border-radius:16px;border:1px solid var(--gray2);width:100%;padding:14px 16px;margin-top:4px}
+.cb-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray);font-size:14px}
+.cb-row:last-child{border-bottom:none}
+.cb-label{color:var(--text2)}
+.cb-score{font-weight:700}
+.cb-score.perfect{color:var(--green)}
+.complete-btns{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
+.complete-btn{width:100%;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:transform .15s}
+.complete-btn:active{transform:scale(.97)}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-secondary{background:var(--gray);color:var(--text)}
+
+/* ── FAVORITES PAGE ── */
+.fav-header{padding:52px 20px 16px;background:#fff;border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
+.fav-title{font-size:22px;font-weight:700}
+.fav-subtitle{font-size:13px;color:var(--muted);margin-top:2px}
+.fav-body{padding:16px}
+.fav-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.fav-empty-icon{font-size:48px;margin-bottom:10px}
+.fav-empty-text{font-size:14px}
+.fav-item{background:#fff;border-radius:14px;border:1px solid var(--gray2);padding:14px 16px;margin-bottom:10px}
+.fav-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.fav-q-text{font-size:14px;font-weight:500;line-height:1.5;flex:1}
+.fav-unstar{background:none;border:none;font-size:20px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
+.fav-answer{font-size:12px;color:var(--green);font-weight:600;margin-top:6px}
+.fav-badges{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.fav-src{font-size:10px;color:var(--muted);background:var(--gray);border-radius:99px;padding:2px 7px}
+
+/* ── SUGGEST MODAL ── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end}
+.modal-backdrop.show{display:flex}
+.modal-sheet{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px calc(24px + var(--safe-b));width:100%;max-height:80dvh;overflow-y:auto}
+.modal-handle{width:40px;height:4px;background:var(--gray2);border-radius:99px;margin:0 auto 20px}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.modal-desc{font-size:13px;color:var(--muted);margin-bottom:16px}
+.modal-textarea{width:100%;border:1.5px solid var(--gray2);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;resize:none;min-height:100px;line-height:1.5;color:var(--text)}
+.modal-textarea:focus{outline:none;border-color:var(--orange)}
+.modal-btns{display:flex;gap:10px;margin-top:12px}
+.modal-cancel{flex:1;background:var(--gray);color:var(--text);border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+.modal-submit{flex:2;background:var(--orange);color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .25s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── CONJUGATION ── */
+.conj-display{background:var(--orange-bg);border-radius:16px;padding:18px 20px 14px;text-align:center;margin-top:12px}
+.conj-verb{font-size:36px;font-weight:700;color:var(--text);line-height:1.2}
+.conj-arrow{font-size:13px;color:var(--muted);margin:6px 0 2px}
+.conj-label{font-size:15px;font-weight:700;color:var(--orange);background:#fff;border-radius:99px;display:inline-block;padding:4px 16px;margin-top:2px}
+
+/* ── ORDER ── */
+.order-placed{min-height:62px;background:var(--gray);border-radius:14px;padding:12px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;border:2px dashed var(--gray2);align-items:center}
+.order-placed.has-words{background:#fff;border-style:solid}
+.order-placed-hint{font-size:13px;color:var(--muted)}
+.order-word{border-radius:10px;padding:9px 14px;font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;border:2px solid var(--gray2);background:#fff;font-family:inherit;color:var(--text)}
+.order-word:active:not(.locked){opacity:.7;transform:scale(.95)}
+.order-word.avail{background:#fff;border-color:var(--gray2)}
+.order-word.placed{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
+.order-word.correct-w{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.order-word.wrong-w{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.order-word.locked{cursor:default}
+.order-available{display:flex;flex-wrap:wrap;gap:8px;margin-top:0}
+.order-section-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-bottom:6px}
+
+/* no quiz page nav */
+#page-quiz .bottom-nav-placeholder{height:0}
+
+/* ── EXPORT MODAL ── */
+.export-textarea{width:100%;border:1.5px solid var(--gray2);border-radius:12px;padding:12px;font-size:12px;font-family:'Courier New',monospace;resize:none;min-height:220px;line-height:1.5;color:var(--text);background:var(--gray)}
+.export-textarea:focus{outline:none;border-color:var(--orange)}
+.copy-btn{flex:2;background:var(--green);color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+.copy-btn:active{opacity:.8}
+</style>
+</head>
+<body>
+
+<!-- ── HOME PAGE ── -->
+<div class="page active" id="page-home">
+  <div class="home-header">
+    <div class="home-title">日文<span>練習</span></div>
+    <div class="home-subtitle">根據你的 Notion 課堂筆記出題</div>
+  </div>
+  <div class="home-body">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num orange" id="statToday">0</div>
+        <div class="stat-label">今日答題</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num green" id="statAccuracy">—</div>
+        <div class="stat-label">正確率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statStreak">0</div>
+        <div class="stat-label">🔥 連續天</div>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn" onclick="startQuiz()">開始練習</button>
+
+    <div class="meta-row">
+      <div class="meta-info" id="metaInfo">載入中…</div>
+      <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">💡 建議功能</button>
+    </div>
+
+    <div class="type-breakdown" id="typeBreakdown" style="margin-top:16px">
+      <div class="type-row">
+        <div class="type-name"><span class="type-badge-sm badge-fill">填空</span>助詞 / 文法挖空</div>
+        <div class="type-count" id="countFill">—</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name"><span class="type-badge-sm badge-choice">選擇</span>讀音 / 用法</div>
+        <div class="type-count" id="countChoice">—</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name"><span class="type-badge-sm badge-tf">是非</span>正誤判斷</div>
+        <div class="type-count" id="countTF">—</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name"><span class="type-badge-sm badge-conj">動詞変化</span>て形 / ない形 / た形</div>
+        <div class="type-count" id="countConj">—</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name"><span class="type-badge-sm badge-order">排序</span>語句排列</div>
+        <div class="type-count" id="countOrder">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── QUIZ PAGE ── -->
+<div class="page" id="page-quiz">
+  <div class="quiz-topbar">
+    <button class="quiz-back" onclick="confirmLeave()">← 離開</button>
+    <div class="quiz-progress" id="quizProgress">1 / 28</div>
+    <button class="quiz-star" id="quizStar" onclick="toggleStar()">☆</button>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <div class="quiz-body" id="quizBody">
+    <!-- filled dynamically -->
+  </div>
+</div>
+
+<!-- ── COMPLETE PAGE ── -->
+<div class="page" id="page-complete">
+  <div class="complete-wrap">
+    <div class="complete-emoji" id="completeEmoji">🎉</div>
+    <div class="complete-title">練習完成！</div>
+    <div>
+      <span class="complete-score" id="completeCorrect">0</span>
+      <span class="complete-denom" id="completeDenom">/ 0</span>
+    </div>
+    <div class="complete-pct" id="completePct"></div>
+    <div class="complete-breakdown" id="completeBreakdown"></div>
+    <div class="complete-btns">
+      <button class="complete-btn btn-primary" onclick="restartQuiz()">再練習一輪</button>
+      <button class="complete-btn btn-secondary" onclick="openExport()">📋 匯出記錄</button>
+      <button class="complete-btn btn-secondary" onclick="switchPage('home')">返回首頁</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EXPORT MODAL ── -->
+<div class="modal-backdrop" id="exportModal" onclick="closeExport(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📋 匯出練習記錄</div>
+    <div class="modal-desc">複製以下內容，貼到 Notion 或其他筆記工具。</div>
+    <textarea class="export-textarea" id="exportText" readonly></textarea>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeExport()">關閉</button>
+      <button class="copy-btn" onclick="copyExport()">複製全部</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FAVORITES PAGE ── -->
+<div class="page" id="page-fav">
+  <div class="fav-header">
+    <div class="fav-title">★ 收藏的題目</div>
+    <div class="fav-subtitle" id="favSubtitle">0 題</div>
+  </div>
+  <div class="fav-body" id="favBody"></div>
+</div>
+
+<!-- ── BOTTOM NAV (hidden during quiz) ── -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">
+    <span class="nav-icon">📚</span>
+    <span>練習</span>
+  </button>
+  <button class="nav-btn" id="nav-fav" onclick="switchPage('fav')">
+    <span class="nav-icon">★</span>
+    <span>收藏</span>
+  </button>
+</nav>
+
+<!-- ── SUGGEST MODAL ── -->
+<div class="modal-backdrop" id="suggestModal" onclick="closeSuggest(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💡 建議功能</div>
+    <div class="modal-desc">有什麼想法或建議？寫下來，之後 Claude 會看到。</div>
+    <textarea class="modal-textarea" id="suggestText" placeholder="例如：增加動詞變化的題目、增加聽力練習…"></textarea>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeSuggest()">取消</button>
+      <button class="modal-submit" onclick="submitSuggest()">儲存建議</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// 日文練習題庫 — generated by Claude from Notion lessons
+// Last updated: 2026-11-22 | Sources: SHUHARI 11/20, SHUHARI 11/06, 兩個傻瓜 10/09, 兩個傻瓜 08/10
+window.QUIZ_DATA = {
+  meta: {
+    generated_at: "2026-11-22",
+    sources: ["SHUHARI JAPANESE 2026-11-20", "SHUHARI JAPANESE 2026-11-06", "兩個傻瓜 2026-10-09", "兩個傻瓜 2026-08-10"],
+    total: 113
+  },
+  questions: [
+    // ── VOCABULARY READINGS ──────────────────────────────
+    {
+      id: "q001",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「お花見」の正しい読み方はどれですか？",
+      options: ["おかみ", "おはなみ", "おはなけん", "はなけん"],
+      answer: 1,
+      explanation: "お花見（おはなみ）：桜の木の下で飲み食いする日本の活動。「見る」だけでなく一つのイベントです。"
+    },
+    {
+      id: "q002",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「散歩する」の正しい読み方はどれですか？",
+      options: ["たんぽする", "さんほする", "さんぽする", "せんぽする"],
+      answer: 2,
+      explanation: "散歩（さんぽ）：ゆっくり歩いて回ること。「お散歩」とも言います。"
+    },
+    {
+      id: "q003",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「在留カード」の正しい読み方はどれですか？",
+      options: ["ざいこうカード", "ざいりゅうカード", "じゅうざいカード", "たいりゅうカード"],
+      answer: 1,
+      explanation: "在留カード（ざいりゅうカード）：外国人が日本に合法的に滞在するために必要な証明カード。"
+    },
+    {
+      id: "q004",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「印鑑」の正しい読み方はどれですか？",
+      options: ["いんけん", "いんき", "いんかん", "はんかん"],
+      answer: 2,
+      explanation: "印鑑（いんかん）：日本のハンコのこと。銀行の手続きなど公式な場面に必要です。"
+    },
+    {
+      id: "q005",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「口座」の正しい読み方はどれですか？",
+      options: ["くちざ", "こうさ", "くちさ", "こうざ"],
+      answer: 3,
+      explanation: "口座（こうざ）：銀行の口座のこと。「口座を開く」（こうざをひらく）は「開銀行帳戶」という意味。"
+    },
+    {
+      id: "q006",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「無料」の正しい読み方はどれですか？",
+      options: ["むりょう", "ぶりょう", "むりょ", "ふりょう"],
+      answer: 0,
+      explanation: "無料（むりょう）：免費。「キャッシュカードは無料ですよ」（提款卡是免費的喔）。"
+    },
+    {
+      id: "q007",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「新潟県」の正しい読み方はどれですか？",
+      options: ["しんかたけん", "にいがたけん", "しんがたけん", "にがたけん"],
+      answer: 1,
+      explanation: "新潟県（にいがたけん）：日本の北西部にある県。コシヒカリというお米と日本酒で有名。"
+    },
+
+    // ── GRAMMAR FILL-IN ──────────────────────────────────
+    {
+      id: "q008",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "空欄に正しい語を選んでください：",
+      sentence: "日本語を勉強する ___ に日本に行きます。",
+      blank_hint: "目的「〜のために」",
+      options: ["ため", "から", "まで", "ので"],
+      answer: 0,
+      explanation: "「〜ために」は目的を表します。動詞辞書形 ＋ ために。「日本語を勉強するために日本に行きます」→ 為了學日語而去日本。"
+    },
+    {
+      id: "q009",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "空欄に正しい助詞を選んでください：",
+      sentence: "家族 ___ ために働きます。",
+      blank_hint: "名詞 ＋ ___ ＋ ために",
+      options: ["の", "が", "を", "は"],
+      answer: 0,
+      explanation: "名詞 ＋ の ＋ ために。「家族のために」（為了家人）。名詞の後には「の」が必要です。動詞なら直接「するために」。"
+    },
+    {
+      id: "q010",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "空欄に正しい助詞を選んでください：",
+      sentence: "週末、お花見 ___ します。",
+      blank_hint: "動作を表す助詞",
+      options: ["を", "に", "が", "は"],
+      answer: 0,
+      explanation: "「お花見をします」：活動をする時は「を」を使います。「〜をします」＝「做〜的動作」。「お花見を見ます」とは言いません（「見る」が重複）。"
+    },
+    {
+      id: "q011",
+      type: "fill",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "銀行員が客に知らせる時、適切な終助詞はどれですか？",
+      sentence: "「キャッシュカードは無料です ___。」",
+      blank_hint: "相手が知らない情報を伝える",
+      options: ["よ", "よね", "ね", "か"],
+      answer: 0,
+      explanation: "「よ」は相手が知らない情報を伝える時に使います。銀行員は知っているが客は知らない→「よ」。「よね」は「あなたも知っていますよね？」という確認のニュアンス。"
+    },
+    {
+      id: "q012",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "空欄に正しい語を選んでください：",
+      sentence: "印鑑 ___ いりますよね。",
+      blank_hint: "追加・並列（〜も）",
+      options: ["も", "が", "を", "は"],
+      answer: 0,
+      explanation: "「印鑑もいりますよね」：「も」は「also / too」の意味で追加情報を加える助詞。「印章也需要吧？」というニュアンス。"
+    },
+
+    // ── TRUE / FALSE ─────────────────────────────────────
+    {
+      id: "q013",
+      type: "tf",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "「行ってきます」は、家を永遠に離れる時に使う表現です。",
+      answer: false,
+      explanation: "間違いです。「行ってきます」は出門する時に「出て行くが必ず戻る」という意味で使います。もし「行きます」だけ言うと、永遠に離れるように聞こえます。"
+    },
+    {
+      id: "q014",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/20",
+      question: "「お花見」は、単に桜を眺めるだけの活動です。",
+      answer: false,
+      explanation: "間違いです。「お花見」は桜の木の下で飲み食いする活動です。「桜を見ます」は単に桜を眺めること、「お花見をします」はそれより特別なイベントです。"
+    },
+    {
+      id: "q015",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/20",
+      question: "「月が綺麗ですね」には、「私はあなたが好き」という隠れた意味があります。",
+      answer: true,
+      explanation: "正しいです。夏目漱石が「I love you」を「月が綺麗ですね」と訳したという有名なエピソードがあります。多くの日本人がこの二重の意味を知っています。"
+    },
+    {
+      id: "q016",
+      type: "tf",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "「よね」は、相手が知らない情報を告げる時に使います。",
+      answer: false,
+      explanation: "間違いです。「よ」が相手の知らない情報を伝える時に使います。「よね」は「あなたもこれを知っていますよね？」という確認のニュアンス。"
+    },
+    {
+      id: "q017",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/20",
+      question: "「友達語（ともだちご）」とは、友達との間で使うカジュアルな日本語のことです。",
+      answer: true,
+      explanation: "正しいです。「友達語」は友達同士で使う informal な表現のことです。丁寧語（です・ます体）を使わない話し方です。"
+    },
+    {
+      id: "q018",
+      type: "tf",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "犬や猫などの（比較的小さい）動物を数える時、「匹（ひき）」という助数詞を使います。",
+      answer: true,
+      explanation: "正しいです。「匹」（ひき）は犬、猫、魚などの比較的小さい動物を数える助数詞です。「二匹の犬」「一匹の猫」。大きな動物（馬・象）は「頭（とう）」を使います。"
+    },
+    {
+      id: "q019",
+      type: "tf",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "「友達ために」は正しい日本語です。",
+      answer: false,
+      explanation: "間違いです。名詞の後に「ために」をつける場合、「の」が必要です。正しくは「友達のために」（為了朋友）。動詞の場合は「するために」と直接つきます。"
+    },
+    {
+      id: "q020",
+      type: "tf",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「散歩する」を漢字で書くと「散歩する」です。",
+      answer: true,
+      explanation: "正しいです。「散歩する」（さんぽする）：散は「ちらばる」、歩は「あるく」という意味の漢字。中国語の「散步」と同じ漢字です。"
+    },
+
+    // ── USAGE & CULTURE CHOICE ───────────────────────────
+    {
+      id: "q021",
+      type: "choice",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "「よ」と「よね」の違いとして正しいのはどれですか？",
+      options: [
+        "「よ」は確認、「よね」は新情報を伝える",
+        "「よ」は新情報を伝える、「よね」は確認",
+        "どちらも相手が知らない情報を告げる",
+        "どちらも相手も知っているかを確認する"
+      ],
+      answer: 1,
+      explanation: "「よ」：相手が知らない情報を教える。例：「キャッシュカードは無料ですよ」\n「よね」：相手も知っているかを確認する。例：「今日は暑いですよね」"
+    },
+    {
+      id: "q022",
+      type: "choice",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "「行ってきます」を正しく使うのはどんな場面ですか？",
+      options: [
+        "外から家に帰ってきた時",
+        "外出して後で家に戻る時",
+        "相手を家に招待する時",
+        "電話を切る時"
+      ],
+      answer: 1,
+      explanation: "「行ってきます」は外出する時に使います（後で戻ることを家人に告げる）。家に帰ってきた時は「ただいま」、電話を切る時は「失礼します」を使います。"
+    },
+    {
+      id: "q023",
+      type: "choice",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "「〜たり〜たりします」の正しい使い方はどれですか？",
+      options: [
+        "花見をたり、雪を見たりします",
+        "お花見をしたり、雪を見たりしたいです",
+        "お花見して雪見てしたいです",
+        "花見したり、雪見て、スキーをしたり"
+      ],
+      answer: 1,
+      explanation: "「〜たり〜たりします」：動詞のた形 ＋ り。複数の活動を列挙する表現。「お花見をしたり、雪を見たりしたいです」（想賞個花、賞個雪之類的）。"
+    },
+    {
+      id: "q024",
+      type: "choice",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "「ために」を正しく使っているのはどれですか？",
+      options: [
+        "友達ために、ケーキを作ります",
+        "日本語を勉強するために日本に行きます",
+        "病気ために、会社を休みます",
+        "嬉しいために、笑います"
+      ],
+      answer: 1,
+      explanation: "「〜するために」：動詞辞書形 ＋ ために（目的）。名詞の場合は「の」が必要（友達のために）。原因・理由を表す時は「〜ので」「〜から」を使います。"
+    },
+    {
+      id: "q025",
+      type: "choice",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "「行けたら」の中に含まれる意味は何ですか？",
+      options: [
+        "〜した後、次の動作をする",
+        "もし〜できたら（条件）の意味が含まれる",
+        "〜している間に何かをする",
+        "〜する前に何かをする"
+      ],
+      answer: 1,
+      explanation: "「行けたら」＝「行ける」（可能形）＋「たら」（条件）。もし行けたら、という意味が一つの言葉に含まれています。「来年ワーキングホリデーに行けたら」→「如果明年能去打工度假的話」。"
+    },
+    {
+      id: "q026",
+      type: "choice",
+      category: "culture",
+      source: "SHUHARI 11/20",
+      question: "新潟県（にいがたけん）で有名なものはどれですか？",
+      options: [
+        "お茶とみかん",
+        "コシヒカリというお米と日本酒と雪",
+        "サクラエビと富士山",
+        "クロマグロと温泉"
+      ],
+      answer: 1,
+      explanation: "新潟県はコシヒカリ（有名なお米の品種）、日本酒、スキー場（雪が多い）、夏の花火大会で有名です。東京から新幹線で約1時間半です。"
+    },
+    {
+      id: "q027",
+      type: "choice",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "「月が綺麗ですね」について正しいのはどれですか？",
+      options: [
+        "単純に「月が美しい」という意味だけ",
+        "悲しい気持ちを表す表現",
+        "表面的には月の美しさ、裏に「好き」という意味も含むことがある",
+        "「さようなら」という意味で使う"
+      ],
+      answer: 2,
+      explanation: "「月が綺麗ですね」は表面的に「月がきれい」という意味ですが、夏目漱石の「I love you」の訳として有名で「あなたが好き」という隠れた意味でも使われます。"
+    },
+    {
+      id: "q028",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/20",
+      question: "「Working Holiday」をカタカナで正しく書くとどうなりますか？",
+      options: [
+        "ウォーキングホリデー",
+        "ワーキングホリデー",
+        "ワキングホリデイ",
+        "ウォーキングホリデイ"
+      ],
+      answer: 1,
+      explanation: "「ワーキングホリデー」：日本語カタカナでは「Working」→「ワーキング」、「Holiday」→「ホリデー」。英語の発音とは異なるカタカナ読みになります。"
+    },
+    // ── 動詞変化 (VERB CONJUGATION) ──────────────────────
+    {
+      id: "v001",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "行く",
+      conjugation_type: "て形",
+      question: "「行く」のて形はどれですか？",
+      options: ["行いて", "行って", "行きて", "行くて"],
+      answer: 1,
+      explanation: "五段動詞「く」のて形：く → いて。ただし「行く」だけは例外で「行って」になります（行いて ✗）。"
+    },
+    {
+      id: "v002",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "ない形",
+      question: "「食べる」のない形はどれですか？",
+      options: ["食べない", "食べません", "食べなく", "食べなかった"],
+      answer: 0,
+      explanation: "一段動詞（〜る）のない形：る → ない。「食べる → 食べない」。「食べません」は丁寧形です。"
+    },
+    {
+      id: "v003",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "する",
+      conjugation_type: "て形",
+      question: "「する」のて形はどれですか？",
+      options: ["すて", "しって", "して", "するて"],
+      answer: 2,
+      explanation: "「する」は不規則動詞（サ変）。て形は「して」。よく使う形：勉強して、散歩して、買い物して。"
+    },
+    {
+      id: "v004",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "見る",
+      conjugation_type: "た形",
+      question: "「見る」のた形はどれですか？",
+      options: ["見った", "見た", "見って", "見ました"],
+      answer: 1,
+      explanation: "一段動詞のた形：る → た。「見る → 見た」。「見ました」は丁寧形（ます形のた形）です。"
+    },
+    {
+      id: "v005",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "書く",
+      conjugation_type: "て形",
+      question: "「書く」のて形はどれですか？",
+      options: ["書いて", "書って", "書きて", "書くて"],
+      answer: 0,
+      explanation: "五段動詞「く」のて形：く → いて。「書く → 書いて」。（「行く」だけは「いて」でなく「って」の例外）"
+    },
+    {
+      id: "v006",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "飲む",
+      conjugation_type: "て形",
+      question: "「飲む」のて形はどれですか？",
+      options: ["飲みて", "飲んで", "飲んて", "飲むて"],
+      answer: 1,
+      explanation: "五段動詞「む」のて形：む → んで。「飲む → 飲んで」。む・ぬ・ぶ で終わる動詞はすべて「んで」になります。"
+    },
+    {
+      id: "v007",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "来る（くる）",
+      conjugation_type: "ない形",
+      question: "「来る（くる）」のない形はどれですか？",
+      options: ["来ない（こない）", "来りない", "来くない", "くるない"],
+      answer: 0,
+      explanation: "「来る（くる）」は不規則動詞（カ変）。ない形は「来ない（こない）」。読み方が「くる → こ」に変わるので注意。"
+    },
+    {
+      id: "v008",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "散歩する",
+      conjugation_type: "て形",
+      question: "「散歩する」のて形はどれですか？",
+      options: ["散歩します", "散歩して", "散歩しって", "散歩した"],
+      answer: 1,
+      explanation: "「〜する」動詞のて形：する → して。「散歩する → 散歩して」。「散歩してから家に帰ります」（散步完後回家）。"
+    },
+
+    // ── 排序題 (SENTENCE ORDERING) ───────────────────────
+    {
+      id: "o001",
+      type: "order",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["勉強するために", "日本語を", "行きます", "日本に"],
+      answer_order: [1, 0, 3, 2],
+      correct_sentence: "日本語を勉強するために日本に行きます。",
+      explanation: "語順：〔目的語〕＋〔ために〕＋〔場所〕＋〔動詞〕。「ために」の前に目的を表す動詞句が来ます。"
+    },
+    {
+      id: "o002",
+      type: "order",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["働きます", "のために", "一生懸命", "家族"],
+      answer_order: [3, 1, 2, 0],
+      correct_sentence: "家族のために一生懸命働きます。",
+      explanation: "「家族のために」（目的）→「一生懸命」（様子）→「働きます」（動詞）。副詞「一生懸命」は動詞の直前に置きます。"
+    },
+    {
+      id: "o003",
+      type: "order",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["雪を見たり", "来年", "したいです", "お花見をしたり、"],
+      answer_order: [1, 3, 0, 2],
+      correct_sentence: "来年お花見をしたり、雪を見たりしたいです。",
+      explanation: "「来年」（時間）が先頭。「〜たり〜たり」でリストし、最後に「したいです」。たり形はリストの最後に「します／したいです」をつけます。"
+    },
+    {
+      id: "o004",
+      type: "order",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["銀行に", "口座を作るために", "行きました", "先週"],
+      answer_order: [3, 1, 0, 2],
+      correct_sentence: "先週口座を作るために銀行に行きました。",
+      explanation: "日本語の語順：〔時〕→〔目的〕→〔場所〕→〔動詞〕。「先週」（時）→「口座を作るために」（目的）→「銀行に」（場所）→「行きました」（動詞）。"
+    },
+    {
+      id: "o005",
+      type: "order",
+      category: "grammar",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["印鑑もいります", "口座を開くとき、", "在留カードと"],
+      answer_order: [1, 2, 0],
+      correct_sentence: "口座を開くとき、在留カードと印鑑もいります。",
+      explanation: "「〜とき」（時・条件）→ 必要なもの列挙 → 動詞。「在留カードと印鑑も」は「AとBも」の並列形。"
+    },
+    {
+      id: "o006",
+      type: "order",
+      category: "usage",
+      source: "SHUHARI 11/20",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["と言います", "「行ってきます」", "出かける前に"],
+      answer_order: [2, 1, 0],
+      correct_sentence: "出かける前に「行ってきます」と言います。",
+      explanation: "「出かける前に」（状況）→「『行ってきます』」（引用内容）→「と言います」（引用の動詞）。引用の「と」は「と言います」と一体で使います。"
+    },
+
+    // ── 動詞変化 追加：て形（新パターン）────────────────────
+    {
+      id: "v013",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "話す",
+      conjugation_type: "て形",
+      question: "「話す」のて形はどれですか？",
+      options: ["話いて", "話して", "話すて", "話きて"],
+      answer: 1,
+      explanation: "五段動詞「す」のて形：す → して。「話す → 話して」。同じ規則：貸す→貸して、押す→押して。"
+    },
+    {
+      id: "v014",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "帰る",
+      conjugation_type: "て形",
+      question: "「帰る」のて形はどれですか？（帰る は第一組）",
+      options: ["帰れて", "帰りて", "帰って", "帰るて"],
+      answer: 2,
+      explanation: "「帰る」は第一組（五段動詞）。る → って（促音便）。「帰って」。同じ規則：走る→走って、切る→切って。第二組の「起きる・食べる」とは違います。"
+    },
+    {
+      id: "v015",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "買う",
+      conjugation_type: "て形",
+      question: "「買う」のて形はどれですか？",
+      options: ["買いて", "買うて", "買って", "買えて"],
+      answer: 2,
+      explanation: "五段動詞「う」のて形：う → って（促音便）。「買う → 買って」。同じ規則：会う→会って、使う→使って、笑う→笑って。"
+    },
+    {
+      id: "v016",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "急ぐ",
+      conjugation_type: "て形",
+      question: "「急ぐ」のて形はどれですか？",
+      options: ["急いて", "急いで", "急ぎて", "急って"],
+      answer: 1,
+      explanation: "五段動詞「ぐ」のて形：ぐ → いで（濁音になる！）。「急ぐ → 急いで」。同じ規則：泳ぐ→泳いで。書く→書いて（清音）との違いに注意。"
+    },
+
+    // ── 動詞変化 追加：ない形 ────────────────────────────
+    {
+      id: "v017",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "行く",
+      conjugation_type: "ない形",
+      question: "「行く」のない形はどれですか？",
+      options: ["行かない", "行きない", "行けない", "行こない"],
+      answer: 0,
+      explanation: "五段動詞「く」のない形：語幹＋かない。「行く → 行か-ない」。法則：語尾をあ段に変えてない。い-く → い-か-ない。"
+    },
+    {
+      id: "v018",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "する",
+      conjugation_type: "ない形",
+      question: "「する」のない形はどれですか？",
+      options: ["すない", "せない", "しない", "さない"],
+      answer: 2,
+      explanation: "「する」は不規則動詞（サ変）。ない形は「しない」。「勉強しない」「仕事しない」のように使います。"
+    },
+    {
+      id: "v019",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "飲む",
+      conjugation_type: "ない形",
+      question: "「飲む」のない形はどれですか？",
+      options: ["飲まない", "飲みない", "飲めない", "飲もない"],
+      answer: 0,
+      explanation: "五段動詞「む」のない形：む → まない。「飲む → 飲まない」。法則：語尾をあ段（ま）に変えてない。"
+    },
+    {
+      id: "v020",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "話す",
+      conjugation_type: "ない形",
+      question: "「話す」のない形はどれですか？",
+      options: ["話さない", "話しない", "話せない", "話すない"],
+      answer: 0,
+      explanation: "五段動詞「す」のない形：す → さない。「話す → 話さない」。同じ規則：貸す→貸さない、押す→押さない。"
+    },
+    {
+      id: "v021",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "帰る",
+      conjugation_type: "ない形",
+      question: "「帰る」（第一組）のない形はどれですか？",
+      options: ["帰れない", "帰りない", "帰らない", "帰るない"],
+      answer: 2,
+      explanation: "第一組「帰る」のない形：る → らない。「帰る → 帰らない」。同じ規則：走る→走らない、乗る→乗らない。第二組（食べる→食べない）と混同しないように！"
+    },
+    {
+      id: "v022",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "買う",
+      conjugation_type: "ない形",
+      question: "「買う」のない形はどれですか？",
+      options: ["買いない", "買うない", "買えない", "買わない"],
+      answer: 3,
+      explanation: "五段動詞「う」のない形：う → わない。「買う → 買わない」。「い」でなく「わ」になるのが特徴！同じ規則：会う→会わない、使う→使わない。"
+    },
+    {
+      id: "v023",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "待つ",
+      conjugation_type: "ない形",
+      question: "「待つ」のない形はどれですか？",
+      options: ["待ちない", "待てない", "待つない", "待たない"],
+      answer: 3,
+      explanation: "五段動詞「つ」のない形：つ → たない。「待つ → 待たない」。同じ規則：持つ→持たない、立つ→立たない。"
+    },
+    {
+      id: "v024",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "起きる",
+      conjugation_type: "ない形",
+      question: "「起きる」のない形はどれですか？",
+      options: ["起かない", "起きない", "起けない", "起こない"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「起きる」のない形：る → ない。「起きる → 起きない」。第二組は語幹を変えずにるをないに替えるだけ。"
+    },
+    {
+      id: "v025",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "寝る",
+      conjugation_type: "ない形",
+      question: "「寝る」のない形はどれですか？",
+      options: ["寝らない", "寝ない", "寝さない", "寝くない"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「寝る」のない形：る → ない。「寝る → 寝ない」。第一組の「帰る→帰らない」とは違うので注意！"
+    },
+
+    // ── 動詞変化 追加：た形 ──────────────────────────────
+    {
+      id: "v026",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "行く",
+      conjugation_type: "た形",
+      question: "「行く」のた形はどれですか？",
+      options: ["行いた", "行きた", "行った", "行くた"],
+      answer: 2,
+      explanation: "「行く」のた形は「行った」（例外！）。通常の「く」のた形は「書いた」（書く→書いた）になりますが、「行く」だけは「行いた」でなく「行った」になります。"
+    },
+    {
+      id: "v027",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "た形",
+      question: "「食べる」のた形はどれですか？",
+      options: ["食べった", "食べた", "食べいた", "食べした"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「食べる」のた形：る → た。「食べる → 食べた」。第二組はて形もた形も語幹はそのままで、て→た に変えるだけ。"
+    },
+    {
+      id: "v028",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "する",
+      conjugation_type: "た形",
+      question: "「する」のた形はどれですか？",
+      options: ["すた", "せた", "した", "さた"],
+      answer: 2,
+      explanation: "「する」の不規則変化：て形は「して」、た形は「した」。セットで覚えましょう：する → して → した。「勉強した」「散歩した」のように使います。"
+    },
+    {
+      id: "v029",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "来る（くる）",
+      conjugation_type: "た形",
+      question: "「来る（くる）」のた形はどれですか？",
+      options: ["くた", "きた（来た）", "くった", "こた"],
+      answer: 1,
+      explanation: "「来る（くる）」の不規則変化：て形は「来て（きて）」、た形は「来た（きた）」。「くる → きて → きた」と読みが変わります。"
+    },
+    {
+      id: "v030",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "飲む",
+      conjugation_type: "た形",
+      question: "「飲む」のた形はどれですか？",
+      options: ["飲みた", "飲んだ", "飲いた", "飲った"],
+      answer: 1,
+      explanation: "五段動詞「む」のた形：む → んだ（撥音便）。「飲む → 飲んだ」。て形が「飲んで」なら、た形は「飲んで → 飲んだ」。で → だ に変えるだけ！"
+    },
+    {
+      id: "v031",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "書く",
+      conjugation_type: "た形",
+      question: "「書く」のた形はどれですか？",
+      options: ["書った", "書いた", "書きた", "書くた"],
+      answer: 1,
+      explanation: "五段動詞「く」のた形：く → いた（イ音便）。「書く → 書いた」。て形が「書いて」なら、た形は「書いた」。て → た に変えるだけ！"
+    },
+    {
+      id: "v032",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "話す",
+      conjugation_type: "た形",
+      question: "「話す」のた形はどれですか？",
+      options: ["話さた", "話した", "話すた", "話いた"],
+      answer: 1,
+      explanation: "五段動詞「す」のた形：す → した。「話す → 話した」。て形が「話して」なら、た形は「話した」。て → た に変えるだけ！"
+    },
+    {
+      id: "v033",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "帰る",
+      conjugation_type: "た形",
+      question: "「帰る」（第一組）のた形はどれですか？",
+      options: ["帰りた", "帰れた", "帰るた", "帰った"],
+      answer: 3,
+      explanation: "第一組「帰る」のた形：る → った（促音便）。「帰る → 帰った」。て形が「帰って」なら、た形は「帰った」。第二組（食べる→食べた）とは違います。"
+    },
+    {
+      id: "v034",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "泳ぐ",
+      conjugation_type: "た形",
+      question: "「泳ぐ」のた形はどれですか？",
+      options: ["泳いた", "泳いだ", "泳ぎた", "泳った"],
+      answer: 1,
+      explanation: "五段動詞「ぐ」のた形：ぐ → いだ（濁音！）。「泳ぐ → 泳いだ」。て形が「泳いで」なら、た形は「泳いだ」。で → だ に変えるだけ！書く→書いた（清音）との違いに注意。"
+    },
+
+    // ── 動詞変化 追加：ます形 ───────────────────────────
+    {
+      id: "v035",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "ます形",
+      question: "「食べる」のます形はどれですか？",
+      options: ["食べります", "食べます", "食べいます", "食ばます"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「食べる」のます形：る → ます。「食べる → 食べます」。第二組はます形が簡単！語幹はそのままでるをますに替えるだけ。"
+    },
+    {
+      id: "v036",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "飲む",
+      conjugation_type: "ます形",
+      question: "「飲む」のます形はどれですか？",
+      options: ["飲まます", "飲むます", "飲みます", "飲えます"],
+      answer: 2,
+      explanation: "第一組「飲む」のます形：語幹をい段に変えてます。む → み → 飲みます。「飲みたいです」「毎日水を飲みます」のように使います。"
+    },
+    {
+      id: "v037",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "話す",
+      conjugation_type: "ます形",
+      question: "「話す」のます形はどれですか？",
+      options: ["話さます", "話すます", "話します", "話えます"],
+      answer: 2,
+      explanation: "第一組「話す」のます形：す → し → 話します。「日本語を話します」のように使います。"
+    },
+    {
+      id: "v038",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "帰る",
+      conjugation_type: "ます形",
+      question: "「帰る」（第一組）のます形はどれですか？",
+      options: ["帰らます", "帰ります", "帰えます", "帰るます"],
+      answer: 1,
+      explanation: "第一組「帰る」のます形：る → り → 帰ります。「何時に帰りますか？」のように使います。第二組（食べる→食べます）との違い：語幹が変わるかどうか。"
+    },
+    {
+      id: "v039",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "買う",
+      conjugation_type: "ます形",
+      question: "「買う」のます形はどれですか？",
+      options: ["買わます", "買うます", "買えます", "買います"],
+      answer: 3,
+      explanation: "第一組「買う」のます形：う → い → 買います。「スーパーで野菜を買います」。同じ規則：会う→会います、使う→使います。"
+    },
+    {
+      id: "v040",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "来る（くる）",
+      conjugation_type: "ます形",
+      question: "「来る（くる）」のます形はどれですか？",
+      options: ["くります", "きます（来ます）", "こます", "くます"],
+      answer: 1,
+      explanation: "「来る（くる）」の不規則変化：ます形は「来ます（きます）」。読みが「くる → き」に変わります。「明日来ますか？」（明天來嗎？）"
+    },
+
+    // ── 動詞変化 追加：可能形 ───────────────────────────
+    {
+      id: "v041",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "可能形",
+      question: "「食べる」の可能形はどれですか？（〜できる）",
+      options: ["食べれます", "食べられる", "食べできる", "食べえる"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「食べる」の可能形：る → られる。「食べる → 食べられる」（能吃）。口語では「食べれる」（ら抜き言葉）も使われますが、正式には「食べられる」です。"
+    },
+    {
+      id: "v042",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "飲む",
+      conjugation_type: "可能形",
+      question: "「飲む」の可能形はどれですか？",
+      options: ["飲まれる", "飲みられる", "飲める", "飲むられる"],
+      answer: 2,
+      explanation: "第一組「飲む」の可能形：語幹をえ段に変えてる。む → め → 飲める。「お酒が飲めません」（不能喝酒）。同じ規則：書く→書ける、話す→話せる。"
+    },
+    {
+      id: "v043",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "書く",
+      conjugation_type: "可能形",
+      question: "「書く」の可能形はどれですか？",
+      options: ["書かれる", "書きられる", "書ける", "書くられる"],
+      answer: 2,
+      explanation: "第一組「書く」の可能形：く → け → 書ける。「漢字が書けます」（能寫漢字）。第一組の可能形は語幹をえ段に変えてる、と覚えましょう。"
+    },
+    {
+      id: "v044",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "話す",
+      conjugation_type: "可能形",
+      question: "「話す」の可能形はどれですか？",
+      options: ["話さられる", "話せる", "話しられる", "話すられる"],
+      answer: 1,
+      explanation: "第一組「話す」の可能形：す → せ → 話せる。「日本語が話せますか？」（会說日語嗎？）。す → せ は少し特殊なのでしっかり覚えましょう。"
+    },
+    {
+      id: "v045",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "する",
+      conjugation_type: "可能形",
+      question: "「する」の可能形はどれですか？",
+      options: ["せられる", "しられる", "できる", "すられる"],
+      answer: 2,
+      explanation: "「する」の可能形は特別で「できる」（能做）。「日本語が話せますか？」→ 「勉強できますか？」のように使います。「することができる」と言うこともできます。"
+    },
+
+    // ── 動詞変化 追加：意向形（〜よう）────────────────────
+    {
+      id: "v046",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "行く",
+      conjugation_type: "意向形",
+      question: "「行く」の意向形（〜しよう）はどれですか？",
+      options: ["行けよう", "行きよう", "行こう", "行くよう"],
+      answer: 2,
+      explanation: "第一組「行く」の意向形：語幹をお段に変えてう。く → こ → 行こう。「一緒に行こう！」（我們一起去吧！）。第一組の意向形は語幹をお段にしてう。"
+    },
+    {
+      id: "v047",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "意向形",
+      question: "「食べる」の意向形（〜しよう）はどれですか？",
+      options: ["食べろう", "食べよう", "食べおう", "食べいよう"],
+      answer: 1,
+      explanation: "第二組（一段動詞）「食べる」の意向形：る → よう。「食べる → 食べよう」。「何を食べよう？」（要吃什麼呢？）第二組の意向形はるをようにするだけ。"
+    },
+    {
+      id: "v048",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "する",
+      conjugation_type: "意向形",
+      question: "「する」の意向形（〜しよう）はどれですか？",
+      options: ["せよう", "すよう", "しよう", "さよう"],
+      answer: 2,
+      explanation: "「する」の不規則変化：意向形は「しよう」。「さあ、勉強しよう！」（來念書吧！）「一緒に何かしよう」（一起做什麼吧）。"
+    },
+    {
+      id: "v049",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "来る（くる）",
+      conjugation_type: "意向形",
+      question: "「来る（くる）」の意向形はどれですか？",
+      options: ["くよう", "こよう（来よう）", "きよう", "くろう"],
+      answer: 1,
+      explanation: "「来る（くる）」の不規則変化：意向形は「来よう（こよう）」。「早く来よう！」（快來吧！）。くる → こ（お段）→ こよう。"
+    },
+
+    // ── 動詞変化 追加：て形＋いる（〜ている）───────────────
+    {
+      id: "v050",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "食べる",
+      conjugation_type: "て形＋いる",
+      question: "「食べる」の「〜ている」形（進行・状態）はどれですか？",
+      options: ["食べています", "食べています", "食べてあります", "食べてます（正式）"],
+      answer: 0,
+      explanation: "「〜ている」形：動詞て形＋います（丁寧）。「食べる → 食べて → 食べています」（正在吃）。「今何を食べていますか？」（現在在吃什麼？）"
+    },
+    {
+      id: "v051",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "働く",
+      conjugation_type: "て形＋いる",
+      question: "「働く」の「〜ている」形はどれですか？",
+      options: ["働っています", "働きています", "働いています", "働てています"],
+      answer: 2,
+      explanation: "「働く」のて形は「働いて」（く→いて）。「働いています」（在工作）。例：「東京で働いています」（在東京工作）。現在の状態を表す場合にも使います。"
+    },
+
+    // ── SHUHARI 11/06：銀行・開戶 ────────────────────────
+    {
+      id: "q029",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/06",
+      question: "「口座」の正しい読み方はどれですか？",
+      options: ["くちざ", "こうざ", "くうざ", "こざ"],
+      answer: 1,
+      explanation: "口座（こうざ）＝銀行帳戶。「口」は「こう」と読みます（他例：口演、口頭）。"
+    },
+    {
+      id: "q030",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/06",
+      question: "「通帳」の正しい読み方はどれですか？",
+      options: ["つうちょう", "つうちょ", "とおちょう", "つうてい"],
+      answer: 0,
+      explanation: "通帳（つうちょう）＝存摺/銀行手冊。日本では多くの銀行が通帳に手数料を課しています。"
+    },
+    {
+      id: "q031",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/06",
+      question: "「暗証番号」の正しい読み方はどれですか？",
+      options: ["あんしょうばんごう", "あんせいばんごう", "あんしょうばんこう", "あんせいばんこう"],
+      answer: 0,
+      explanation: "暗証番号（あんしょうばんごう）＝PIN碼。「暗証」は秘密的証明，「番号」は號碼。"
+    },
+    {
+      id: "q032",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/06",
+      question: "「印鑑」の正しい読み方はどれですか？",
+      options: ["いんかん", "いんけん", "はんこう", "はんかん"],
+      answer: 0,
+      explanation: "印鑑（いんかん）＝個人印章。日本では銀行手続きに必要なことが多いですが、外国人はサインでも可能な場合があります。"
+    },
+    {
+      id: "q033",
+      type: "choice",
+      category: "vocab",
+      source: "SHUHARI 11/06",
+      question: "「普通預金」と「定期預金」の違いはどれですか？",
+      options: [
+        "普通預金は引き出しが自由で、定期預金は期間を決めて預けるもの",
+        "普通預金は金利が高く、定期預金は低い",
+        "普通預金は外国人専用で、定期預金は日本人専用",
+        "普通預金はオンライン専用で、定期預金は窓口専用"
+      ],
+      answer: 0,
+      explanation: "普通預金（ふつうよきん）は自由に出し入れできる普通の口座。定期預金（ていきよきん）は一定期間お金を預けて金利を得るもの。日本人は多く普通預金を使います。"
+    },
+    {
+      id: "q034",
+      type: "choice",
+      category: "usage",
+      source: "SHUHARI 11/06",
+      question: "「もらいます」の使い方として正しいのはどれですか？",
+      options: [
+        "友達にプレゼントをもらいました。（友達からもらった）",
+        "友達にプレゼントをもらいました。（友達にあげた）",
+        "もらいますは物を渡す時に使う",
+        "もらいますは物を買う時に使う"
+      ],
+      answer: 0,
+      explanation: "もらいます＝接受・收到（自分が受け取る）。あげます＝給予（自分が渡す）。送ります＝寄送。「友達にプレゼントをもらいました」は友達からプレゼントを受け取ったという意味。"
+    },
+    {
+      id: "q035",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/06",
+      question: "日本では通帳（銀行の手帳）はほとんどの銀行で無料で発行してもらえます。",
+      answer: false,
+      explanation: "✗ 現在の日本では多くの銀行が通帳の発行や維持に手数料を課しています。ネット銀行では通帳がないのが普通です。"
+    },
+    {
+      id: "q036",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/06",
+      question: "在日外国人が銀行口座を開設する際、パスポートや在留カードが本人確認書類として使えます。",
+      answer: true,
+      explanation: "✓ 本人確認書類（ほんにんかくにんしょるい）として、在留カードやパスポートが使えます。日本人と同様の手続きで口座を開設できます。"
+    },
+    {
+      id: "q037",
+      type: "tf",
+      category: "culture",
+      source: "SHUHARI 11/06",
+      question: "銀行の暗証番号（PIN）には生年月日を使うのが一般的で安全です。",
+      answer: false,
+      explanation: "✗ 生年月日（せいねんがっぴ）などの簡単な数字は推測されやすく危険です。授業でも「暗証番号は生年月日など簡単な数字は使わないように」と説明されました。"
+    },
+    {
+      id: "q038",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/06",
+      question: "銀行で言う表現を選んでください：",
+      sentence: "口座を開設___ たいです。",
+      options: ["を", "が", "し", "に"],
+      answer: 2,
+      explanation: "「口座を開設したいです」＝想開戶。「〜したいです」は「する動詞」の望み形：開設する → 開設し + たいです。"
+    },
+    {
+      id: "q039",
+      type: "fill",
+      category: "grammar",
+      source: "SHUHARI 11/06",
+      question: "銀行員が言う言葉を完成させてください：",
+      sentence: "こちらの書類に___と住所を記入してください。",
+      options: ["氏名", "名前", "名字", "苗字"],
+      answer: 0,
+      explanation: "「氏名（しめい）」は正式な書類で使われる「フルネーム」の表現。日常会話では「名前（なまえ）」が一般的。銀行の申請書では「氏名」が使われます。"
+    },
+
+    // ── 兩個傻瓜 10/09：〜ことが好き・対比・語彙 ─────────
+    {
+      id: "q040",
+      type: "choice",
+      category: "vocab",
+      source: "兩個傻瓜 10/09",
+      question: "「湿気」の正しい読み方はどれですか？",
+      options: ["しつき", "しっけ", "しつけ", "しっき"],
+      answer: 1,
+      explanation: "湿気（しっけ）＝濕氣、潮濕感受。「湿度（しつど）が高いです」は計量上的濕度高，「湿気が多いです」是主觀感受潮濕。"
+    },
+    {
+      id: "q041",
+      type: "choice",
+      category: "vocab",
+      source: "兩個傻瓜 10/09",
+      question: "「応募する」の読み方と意味として正しいのはどれですか？",
+      options: [
+        "おうぼする：応徴・報名・申請",
+        "おうふする：回覆・応答",
+        "おぼする：募集する",
+        "おうぼする：拒絶する"
+      ],
+      answer: 0,
+      explanation: "応募する（おうぼする）＝應徵・報名・投件。例：「コンサートのチケットを応募しました」（報名抽演唱會門票）。"
+    },
+    {
+      id: "q042",
+      type: "choice",
+      category: "vocab",
+      source: "兩個傻瓜 10/09",
+      question: "「当たる」の意味として正しくないのはどれですか？",
+      options: ["中獎", "擊中・命中", "曬到（太陽）", "失去・失敗"],
+      answer: 3,
+      explanation: "当たる（あたる）の主な意味：①中獎（チケットが当たる）②命中（的に当たる）③曬到（日光に当たる）。「失去・失敗」は「外れる（はずれる）」の意味です。"
+    },
+    {
+      id: "q043",
+      type: "tf",
+      category: "usage",
+      source: "兩個傻瓜 10/09",
+      question: "「いつか」は「いつか火曜日に行きます」のように、具体的な日時と一緒に使います。",
+      answer: false,
+      explanation: "✗ 「いつか」は「總有一天」の意味で、具体的な日時は指しません。「いつかYOASOBIのコンサートに行きたいです」（總有一天想去演唱會）のように、未来の漠然とした願望に使います。"
+    },
+    {
+      id: "q044",
+      type: "tf",
+      category: "usage",
+      source: "兩個傻瓜 10/09",
+      question: "「嫌いです」は「好きじゃありません」より丁寧な言い方です。",
+      answer: false,
+      explanation: "✗ 「嫌いです」の方が嫌悪感が強く、やや直接的。「好きじゃありません」の方が礼儀正しい表現です。順序：好きです → 好きじゃありません → 嫌いじゃありません → 嫌いです（強い）。"
+    },
+    {
+      id: "q045",
+      type: "fill",
+      category: "grammar",
+      source: "兩個傻瓜 10/09",
+      question: "「〜ことが好きです」の正しい形を選んでください：",
+      sentence: "音楽を___ことが好きです。",
+      options: ["聴く", "聴き", "聴いて", "聴ける"],
+      answer: 0,
+      explanation: "「〜ことが好きです」の前には動詞の辞書形（原形）を使います。聴く（辞書形）＋ことが好きです。×聴きことが、×聴いてことが。"
+    },
+    {
+      id: "q046",
+      type: "fill",
+      category: "grammar",
+      source: "兩個傻瓜 10/09",
+      question: "対比の文を完成させてください：",
+      sentence: "絵を見ること___好きですが、描くことは好きじゃありません。",
+      options: ["は", "が", "を", "の"],
+      answer: 0,
+      explanation: "対比の文では「〜ことは〜、〜ことは〜」と両方に「は」を使います。「絵を見ることは好きですが、描くことは好きじゃありません」。対比には「は」！"
+    },
+    {
+      id: "q047",
+      type: "choice",
+      category: "usage",
+      source: "兩個傻瓜 10/09",
+      question: "「でしたっけ」はどんな時に使いますか？",
+      options: [
+        "確認したいことが不確かな時",
+        "強く主張したい時",
+        "丁寧に断る時",
+        "過去のことを後悔する時"
+      ],
+      answer: 0,
+      explanation: "「〜でしたっけ」は不確かな情報を相手に確認するときに使います。例：「来年から日本に行くんでしたっけ？」（你是明年要去日本對吧？）"
+    },
+    {
+      id: "q048",
+      type: "choice",
+      category: "vocab",
+      source: "兩個傻瓜 10/09",
+      question: "「夜更かし」の読みと意味として正しいのはどれですか？",
+      options: [
+        "よふかし：熬夜",
+        "よすかし：早起き",
+        "やふかし：昼寝",
+        "よふかし：早く寝ること"
+      ],
+      answer: 0,
+      explanation: "夜更かし（よふかし）＝熬夜。睡眠不足の原因になります。「夜更かしをしてしまいました」（遺憾地熬夜了）。"
+    },
+
+    // ── 兩個傻瓜 08/10：〜たいです・動詞分類・て形 ─────────
+    {
+      id: "q049",
+      type: "choice",
+      category: "grammar",
+      source: "兩個傻瓜 08/10",
+      question: "「〜たいです」の正しい作り方はどれですか？",
+      options: [
+        "動詞のます形のます → たいです（例：食べます→食べたいです）",
+        "動詞の辞書形 ＋ たいです（例：食べる→食べるたいです）",
+        "動詞のて形 ＋ たいです（例：食べて→食べてたいです）",
+        "動詞のない形 ＋ たいです（例：食べない→食べないたいです）"
+      ],
+      answer: 0,
+      explanation: "「〜たいです」は動詞のます形からますを取り、たいをつけます。食べます → 食べ + たいです → 食べたいです。行きます → 行き + たいです → 行きたいです。"
+    },
+    {
+      id: "q050",
+      type: "choice",
+      category: "vocab",
+      source: "兩個傻瓜 08/10",
+      question: "「荷物」の正しい読み方はどれですか？",
+      options: ["にもの", "にもつ", "かもつ", "かもの"],
+      answer: 1,
+      explanation: "荷物（にもつ）＝行李・物品。「荷物を置きます」（放行李）。「貨物（かもつ）」は貨運，注意不要混淆。"
+    },
+    {
+      id: "q051",
+      type: "tf",
+      category: "grammar",
+      source: "兩個傻瓜 08/10",
+      question: "日本語の動詞は第一組、第二組、第三組の三つのグループに分けられます。",
+      answer: true,
+      explanation: "✓ 日本語の動詞は三組：第一組（五段動詞、ます形の前がi段以外）、第二組（一段動詞、ます形の前がi段またはe段）、第三組（する・来る）。て形の変化規則がグループによって異なります。"
+    },
+    {
+      id: "q052",
+      type: "choice",
+      category: "grammar",
+      source: "兩個傻瓜 08/10",
+      question: "第三組（不規則動詞）に属するのはどれですか？",
+      options: [
+        "します・来ます（する・来る）",
+        "食べます・見ます",
+        "書きます・待ちます",
+        "飲みます・読みます"
+      ],
+      answer: 0,
+      explanation: "第三組は「する」と「来る（くる）」の2つのみ。この2つは不規則変化なので覚える必要があります。勉強します→勉強して、来ます→来て（きて）。"
+    },
+    {
+      id: "q053",
+      type: "tf",
+      category: "grammar",
+      source: "兩個傻瓜 08/10",
+      question: "「〜てください」は動詞のて形 ＋「ください」で作ります。",
+      answer: true,
+      explanation: "✓ 「〜てください」＝請（做某事）。動詞のて形＋ください。例：書く→書いて→書いてください（請寫）。道を教えてください（請告訴我路）。"
+    },
+
+    // ── 動詞変化 追加 ────────────────────────────────────
+    {
+      id: "v009",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "遊ぶ",
+      conjugation_type: "て形",
+      question: "「遊ぶ」のて形はどれですか？",
+      options: ["遊びて", "遊んて", "遊んで", "遊ぶて"],
+      answer: 2,
+      explanation: "五段動詞「ぶ」のて形：ぶ → んで（撥音便）。「遊ぶ → 遊んで」。む・ぬ・ぶ で終わる動詞はすべて「んで」になります。"
+    },
+    {
+      id: "v010",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "泳ぐ",
+      conjugation_type: "て形",
+      question: "「泳ぐ」のて形はどれですか？",
+      options: ["泳いで", "泳いて", "泳ぎて", "泳って"],
+      answer: 0,
+      explanation: "五段動詞「ぐ」のて形：ぐ → いで（いで、濁音注意）。「泳ぐ → 泳いで」。書く→書いて（清音「て」）、泳ぐ→泳いで（濁音「で」）。"
+    },
+    {
+      id: "v011",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "待つ",
+      conjugation_type: "て形",
+      question: "「待つ」のて形はどれですか？",
+      options: ["待って", "待いて", "待ちて", "待つて"],
+      answer: 0,
+      explanation: "五段動詞「つ」のて形：つ → って（促音便）。「待つ → 待って」。同じ規則：持つ→持って、立つ→立って。"
+    },
+    {
+      id: "v012",
+      type: "conjugation",
+      category: "grammar",
+      source: "動詞基礎",
+      verb: "来る",
+      conjugation_type: "て形",
+      question: "「来る」のて形はどれですか？",
+      options: ["来て", "来って", "来いて", "くて"],
+      answer: 0,
+      explanation: "「来る（くる）」は第三組（不規則動詞）。て形は「来て（きて）」。勉強して、来て — この2つは例外として覚えましょう。"
+    },
+
+    // ── 排序題 追加 ──────────────────────────────────────
+    {
+      id: "o007",
+      type: "order",
+      category: "grammar",
+      source: "兩個傻瓜 08/10",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["食べたいです", "寿司を", "日本で"],
+      answer_order: [2, 1, 0],
+      correct_sentence: "日本で寿司を食べたいです。",
+      explanation: "「〜たいです」の語順：〔場所〕→〔目的語〕→〔動詞たいです〕。「日本で」（場所）→「寿司を」（目的語）→「食べたいです」（動詞）。"
+    },
+    {
+      id: "o008",
+      type: "order",
+      category: "grammar",
+      source: "兩個傻瓜 10/09",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["好きですが、", "ことは", "描くことは好きじゃありません", "絵を見る"],
+      answer_order: [3, 1, 0, 2],
+      correct_sentence: "絵を見ることは好きですが、描くことは好きじゃありません。",
+      explanation: "対比文の構造：〔A〕ことは〔好き〕ですが、〔B〕ことは好きじゃありません。対比には「は」を使い、「が」でつなげます。"
+    },
+    {
+      id: "o009",
+      type: "order",
+      category: "grammar",
+      source: "SHUHARI 11/06",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["4桁の", "設定してください", "暗証番号を"],
+      answer_order: [0, 2, 1],
+      correct_sentence: "4桁の暗証番号を設定してください。",
+      explanation: "「〜てください」の語順：〔修飾語〕→〔目的語〕→〔動詞てください〕。「4桁の」（修飾）→「暗証番号を」（目的語）→「設定してください」（動詞）。"
+    }
+  ]
+};
+
+</script>
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let allQuestions = [];
+let deck = [];           // current quiz deck
+let currentIdx = 0;
+let answered = false;
+let score = { correct: 0, total: 0 };
+let typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0} };
+let orderPlaced = [];
+let orderAvailable = [];
+let sessionResults = []; // { q, correct } per question in current session
+
+let starred = new Set(JSON.parse(localStorage.getItem('jq_starred') || '[]'));
+let todayStats = JSON.parse(localStorage.getItem('jq_today') || '{"date":"","correct":0,"total":0}');
+let streak = parseInt(localStorage.getItem('jq_streak') || '0');
+let suggests = JSON.parse(localStorage.getItem('jq_suggests') || '[]');
+
+// Fix today's stats if stale
+const today = new Date().toISOString().slice(0,10);
+if (todayStats.date !== today) todayStats = { date: today, correct: 0, total: 0 };
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function init() {
+  if (!window.QUIZ_DATA) {
+    document.getElementById('metaInfo').textContent = '❌ 無法載入題目，請確認 questions.js 在同一資料夾';
+    return;
+  }
+  allQuestions = window.QUIZ_DATA.questions;
+  updateHomeStats();
+  updateTypeCounts();
+  document.getElementById('metaInfo').textContent =
+    `更新：${window.QUIZ_DATA.meta.generated_at} · 共 ${allQuestions.length} 題`;
+}
+
+function updateHomeStats() {
+  document.getElementById('statToday').textContent = todayStats.total;
+  document.getElementById('statAccuracy').textContent =
+    todayStats.total > 0 ? Math.round(todayStats.correct / todayStats.total * 100) + '%' : '—';
+  document.getElementById('statStreak').textContent = streak;
+}
+
+function updateTypeCounts() {
+  const qs = allQuestions;
+  document.getElementById('countFill').textContent = qs.filter(q => q.type === 'fill').length + ' 題';
+  document.getElementById('countChoice').textContent = qs.filter(q => q.type === 'choice').length + ' 題';
+  document.getElementById('countTF').textContent = qs.filter(q => q.type === 'tf').length + ' 題';
+  document.getElementById('countConj').textContent = qs.filter(q => q.type === 'conjugation').length + ' 題';
+  document.getElementById('countOrder').textContent = qs.filter(q => q.type === 'order').length + ' 題';
+  document.getElementById('startBtn').textContent = `開始練習（${qs.length} 題）`;
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  document.getElementById('bottomNav').style.display = 'flex';
+  if (name === 'fav') renderFavorites();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════
+// QUIZ FLOW
+// ═══════════════════════════════════════════
+function startQuiz() {
+  const qs = [...allQuestions];
+  if (!qs.length) { showToast('沒有符合條件的題目'); return; }
+  deck = shuffle([...qs]);
+  currentIdx = 0;
+  score = { correct: 0, total: 0 };
+  typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0} };
+  sessionResults = [];
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-quiz').classList.add('active');
+  document.getElementById('bottomNav').style.display = 'none';
+  renderQuestion();
+}
+
+function restartQuiz() {
+  startQuiz();
+}
+
+function renderQuestion() {
+  const q = deck[currentIdx];
+  answered = false;
+  const total = deck.length;
+
+  document.getElementById('quizProgress').textContent = `${currentIdx + 1} / ${total}`;
+  document.getElementById('progressFill').style.width = `${(currentIdx / total) * 100}%`;
+  document.getElementById('quizStar').textContent = starred.has(q.id) ? '★' : '☆';
+
+  const typeBadge = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' }[q.type] || q.type;
+  const typeClass = { fill:'badge-type-fill', choice:'badge-type-choice', tf:'badge-type-tf', conjugation:'badge-type-conj', order:'badge-type-order' }[q.type] || '';
+
+  let answerHTML = '';
+  if (q.type === 'fill') {
+    const sentenceHTML = q.sentence.replace('___', `<span class="blank" id="blankSpan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
+    answerHTML = `<div class="q-sentence">${sentenceHTML}</div>`;
+  } else if (q.type === 'conjugation') {
+    answerHTML = `
+      <div class="conj-display">
+        <div class="conj-verb">${q.verb}</div>
+      </div>
+    `;
+  } else {
+    answerHTML = '';
+  }
+
+  let optionsHTML = '';
+  if (q.type === 'fill' || q.type === 'conjugation') {
+    optionsHTML = `<div class="chip-grid" id="optionArea">
+      ${q.options.map((o,i) => `<button class="chip-opt" data-idx="${i}" onclick="submitAnswer(${i})">${o}</button>`).join('')}
+    </div>`;
+  } else if (q.type === 'choice') {
+    const letters = ['A','B','C','D'];
+    optionsHTML = `<div class="choice-list" id="optionArea">
+      ${q.options.map((o,i) => `
+        <button class="choice-opt" data-idx="${i}" onclick="submitAnswer(${i})">
+          <span class="choice-letter">${letters[i]}</span>
+          <span>${o}</span>
+        </button>`).join('')}
+    </div>`;
+  } else if (q.type === 'tf') {
+    optionsHTML = `<div class="tf-row" id="optionArea">
+      <button class="tf-btn" data-idx="true" onclick="submitTF(true)">
+        ○<span class="tf-label">正確</span>
+      </button>
+      <button class="tf-btn" data-idx="false" onclick="submitTF(false)">
+        ×<span class="tf-label">錯誤</span>
+      </button>
+    </div>`;
+  } else if (q.type === 'order') {
+    orderPlaced = [];
+    orderAvailable = shuffle(q.parts.map((_,i) => i));
+    optionsHTML = `
+      <div class="order-section-label">排列順序</div>
+      <div class="order-placed" id="orderPlaced">
+        <span class="order-placed-hint">點下方的語句，依序排列</span>
+      </div>
+      <div class="order-section-label" style="margin-top:14px">語句</div>
+      <div class="order-available" id="orderAvailable"></div>
+    `;
+  }
+
+  document.getElementById('quizBody').innerHTML = `
+    <div class="q-badges">
+      <span class="q-type-badge ${typeClass}">${typeBadge}</span>
+      <span class="q-source">${q.source || ''}</span>
+    </div>
+    <div class="q-card">
+      <div class="q-text">${q.question}</div>
+      ${answerHTML}
+    </div>
+    ${optionsHTML}
+    <div class="feedback-card" id="feedbackCard">
+      <div class="feedback-top">
+        <span class="feedback-icon" id="fbIcon"></span>
+        <span class="feedback-result" id="fbResult"></span>
+      </div>
+      <div class="feedback-explain" id="fbExplain"></div>
+      <button class="next-btn orange-btn" onclick="nextQuestion()">
+        ${currentIdx + 1 < deck.length ? '下一題 →' : '查看成績 →'}
+      </button>
+    </div>
+  `;
+
+  // For order questions: render the interactive word chips after innerHTML is set
+  if (q.type === 'order') renderOrderUI(q);
+}
+
+function submitAnswer(selectedIdx) {
+  if (answered) return;
+  const q = deck[currentIdx];
+  const correct = selectedIdx === q.answer;
+  answered = true;
+  recordResult(q, correct);
+
+  const area = document.getElementById('optionArea');
+  const btns = area.querySelectorAll('button');
+  btns.forEach(b => {
+    b.classList.add('locked');
+    const idx = parseInt(b.dataset.idx);
+    if (idx === q.answer) b.classList.add('correct');
+    else if (idx === selectedIdx && !correct) b.classList.add('wrong');
+  });
+
+  // Fill: update blank display
+  if (q.type === 'fill') {
+    const blank = document.getElementById('blankSpan');
+    if (blank) {
+      blank.textContent = q.options[selectedIdx];
+      blank.classList.add('filled');
+      blank.style.color = correct ? 'var(--green)' : 'var(--red)';
+      blank.style.background = correct ? 'var(--green-bg)' : 'var(--red-bg)';
+    }
+  }
+
+  showFeedback(correct, q.explanation);
+}
+
+function submitTF(selected) {
+  if (answered) return;
+  const q = deck[currentIdx];
+  const correct = selected === q.answer;
+  answered = true;
+  recordResult(q, correct);
+
+  const btns = document.querySelectorAll('.tf-btn');
+  btns.forEach(b => {
+    b.classList.add('locked');
+    const val = b.dataset.idx === 'true';
+    if (val === q.answer) b.classList.add('correct');
+    else if (val === selected && !correct) b.classList.add('wrong');
+  });
+
+  showFeedback(correct, q.explanation);
+}
+
+// ── ORDER QUESTION INTERACTIONS ───────────────────────
+function renderOrderUI(q) {
+  const placedEl = document.getElementById('orderPlaced');
+  const availEl = document.getElementById('orderAvailable');
+  if (!placedEl || !availEl) return;
+
+  if (orderPlaced.length === 0) {
+    placedEl.innerHTML = '<span class="order-placed-hint">點下方的語句，依序排列</span>';
+    placedEl.classList.remove('has-words');
+  } else {
+    placedEl.classList.add('has-words');
+    placedEl.innerHTML = orderPlaced.map((idx, pos) =>
+      `<button class="order-word placed" onclick="removePlaced(${pos})">${q.parts[idx]}</button>`
+    ).join('');
+  }
+
+  availEl.innerHTML = orderAvailable.map(idx =>
+    `<button class="order-word avail" onclick="placeWord(${idx})">${q.parts[idx]}</button>`
+  ).join('');
+}
+
+function placeWord(idx) {
+  if (answered) return;
+  const q = deck[currentIdx];
+  orderAvailable = orderAvailable.filter(i => i !== idx);
+  orderPlaced.push(idx);
+  renderOrderUI(q);
+  if (orderPlaced.length === q.parts.length) checkOrder(q);
+}
+
+function removePlaced(pos) {
+  if (answered) return;
+  const q = deck[currentIdx];
+  const idx = orderPlaced[pos];
+  orderPlaced.splice(pos, 1);
+  orderAvailable.push(idx);
+  renderOrderUI(q);
+}
+
+function checkOrder(q) {
+  answered = true;
+  const correct = JSON.stringify(orderPlaced) === JSON.stringify(q.answer_order);
+  recordResult(q, correct);
+
+  // Freeze and colour placed words
+  const placedEl = document.getElementById('orderPlaced');
+  if (placedEl) {
+    placedEl.classList.add('has-words');
+    placedEl.innerHTML = orderPlaced.map((idx, pos) => {
+      const right = orderPlaced[pos] === q.answer_order[pos];
+      return `<button class="order-word ${correct ? 'correct-w' : right ? 'correct-w' : 'wrong-w'} locked">${q.parts[idx]}</button>`;
+    }).join('');
+  }
+  document.querySelectorAll('.order-word.avail').forEach(b => b.classList.add('locked'));
+
+  const extra = correct ? '' : `\n正確順序：${q.correct_sentence}`;
+  showFeedback(correct, (q.explanation || '') + extra);
+}
+
+function showFeedback(correct, explanation) {
+  const card = document.getElementById('feedbackCard');
+  const icon = document.getElementById('fbIcon');
+  const result = document.getElementById('fbResult');
+  const explain = document.getElementById('fbExplain');
+
+  card.classList.add('show');
+  card.classList.add(correct ? 'correct-fb' : 'wrong-fb');
+  icon.textContent = correct ? '✅' : '❌';
+  result.textContent = correct ? '正確！' : '答錯了';
+  result.className = 'feedback-result ' + (correct ? 'ok' : 'ng');
+  explain.textContent = explanation || '';
+
+  // Scroll to feedback
+  setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+}
+
+function nextQuestion() {
+  currentIdx++;
+  if (currentIdx >= deck.length) {
+    showComplete();
+  } else {
+    renderQuestion();
+    window.scrollTo(0,0);
+  }
+}
+
+function recordResult(q, correct) {
+  score.total++;
+  if (correct) score.correct++;
+  typeScore[q.type].total++;
+  if (correct) typeScore[q.type].correct++;
+
+  todayStats.total++;
+  if (correct) todayStats.correct++;
+  localStorage.setItem('jq_today', JSON.stringify(todayStats));
+  updateStreakIfNeeded();
+
+  // Track per-session results
+  sessionResults.push({ q, correct });
+
+  // Auto-star wrong answers
+  if (!correct && !starred.has(q.id)) {
+    starred.add(q.id);
+    localStorage.setItem('jq_starred', JSON.stringify([...starred]));
+    const btn = document.getElementById('quizStar');
+    if (btn) btn.textContent = '★';
+    showToast('答錯自動收藏 ★');
+  }
+}
+
+function updateStreakIfNeeded() {
+  const lastDay = localStorage.getItem('jq_lastDay');
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  if (lastDay === yesterday || !lastDay) {
+    if (lastDay !== today) {
+      streak++;
+      localStorage.setItem('jq_streak', streak);
+      localStorage.setItem('jq_lastDay', today);
+    }
+  } else if (lastDay !== today) {
+    streak = 1;
+    localStorage.setItem('jq_streak', streak);
+    localStorage.setItem('jq_lastDay', today);
+  }
+}
+
+// ═══════════════════════════════════════════
+// COMPLETE SCREEN
+// ═══════════════════════════════════════════
+function showComplete() {
+  document.getElementById('progressFill').style.width = '100%';
+  const pct = Math.round(score.correct / score.total * 100);
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '💪' : '📖';
+
+  document.getElementById('completeEmoji').textContent = emoji;
+  document.getElementById('completeCorrect').textContent = score.correct;
+  document.getElementById('completeDenom').textContent = `/ ${score.total}`;
+  document.getElementById('completePct').textContent = `正確率 ${pct}%`;
+
+  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
+  const bd = document.getElementById('completeBreakdown');
+  bd.innerHTML = Object.entries(typeScore)
+    .filter(([,v]) => v.total > 0)
+    .map(([k,v]) => {
+      const p = Math.round(v.correct/v.total*100);
+      return `<div class="cb-row">
+        <span class="cb-label">${typeNames[k]}</span>
+        <span class="cb-score ${p===100?'perfect':''}">${v.correct}/${v.total} (${p}%)</span>
+      </div>`;
+    }).join('');
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-complete').classList.add('active');
+  document.getElementById('bottomNav').style.display = 'flex';
+  updateHomeStats();
+  window.scrollTo(0,0);
+}
+
+function confirmLeave() {
+  if (!answered && score.total === 0) {
+    switchPage('home');
+    return;
+  }
+  if (confirm('確定要離開練習嗎？（進度不會儲存）')) {
+    switchPage('home');
+  }
+}
+
+// ═══════════════════════════════════════════
+// STAR / FAVORITES
+// ═══════════════════════════════════════════
+function toggleStar() {
+  if (!deck.length) return;
+  const q = deck[currentIdx];
+  if (starred.has(q.id)) {
+    starred.delete(q.id);
+    document.getElementById('quizStar').textContent = '☆';
+    showToast('已取消收藏');
+  } else {
+    starred.add(q.id);
+    document.getElementById('quizStar').textContent = '★';
+    showToast('已收藏 ★');
+  }
+  localStorage.setItem('jq_starred', JSON.stringify([...starred]));
+}
+
+function renderFavorites() {
+  const starredList = allQuestions.filter(q => starred.has(q.id));
+  document.getElementById('favSubtitle').textContent = `${starredList.length} 題`;
+  const body = document.getElementById('favBody');
+  if (!starredList.length) {
+    body.innerHTML = `<div class="fav-empty">
+      <div class="fav-empty-icon">☆</div>
+      <div class="fav-empty-text">還沒有收藏的題目<br>答錯的題目會自動收藏進來</div>
+    </div>`;
+    return;
+  }
+  const typeLabel = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
+  const typeBadgeCls = { fill:'badge-fill', choice:'badge-choice', tf:'badge-tf', conjugation:'badge-conj', order:'badge-order' };
+  body.innerHTML = starredList.map(q => {
+    let ans = '';
+    if (q.type === 'tf') ans = q.answer ? '○ 正確' : '× 錯誤';
+    else if (q.type === 'order') ans = q.correct_sentence;
+    else if (q.options) ans = q.options[q.answer];
+    const extra = q.type === 'fill' ? `<br><small style="color:var(--muted)">${q.sentence}</small>`
+                : q.type === 'conjugation' ? `<br><small style="color:var(--muted)">${q.verb} → ${q.conjugation_type}</small>`
+                : '';
+    return `<div class="fav-item">
+      <div class="fav-item-top">
+        <div class="fav-q-text">${q.question}${extra}</div>
+        <button class="fav-unstar" onclick="unstar('${q.id}')">★</button>
+      </div>
+      <div class="fav-answer">答：${ans}</div>
+      <div class="fav-badges">
+        <span class="fav-src type-badge-sm ${typeBadgeCls[q.type]||''}">${typeLabel[q.type]||q.type}</span>
+        <span class="fav-src">${q.source}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function unstar(id) {
+  starred.delete(id);
+  localStorage.setItem('jq_starred', JSON.stringify([...starred]));
+  renderFavorites();
+  showToast('已取消收藏');
+}
+
+// ═══════════════════════════════════════════
+// SUGGEST
+// ═══════════════════════════════════════════
+function openSuggest() {
+  document.getElementById('suggestModal').classList.add('show');
+  setTimeout(() => document.getElementById('suggestText').focus(), 200);
+}
+function closeSuggest(e) {
+  if (e && e.target !== document.getElementById('suggestModal')) return;
+  document.getElementById('suggestModal').classList.remove('show');
+}
+function submitSuggest() {
+  const text = document.getElementById('suggestText').value.trim();
+  if (!text) return;
+  suggests.push({ text, date: new Date().toISOString() });
+  localStorage.setItem('jq_suggests', JSON.stringify(suggests));
+  document.getElementById('suggestText').value = '';
+  document.getElementById('suggestModal').classList.remove('show');
+  showToast('✅ 建議已儲存');
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ═══════════════════════════════════════════
+// NOTION EXPORT
+// ═══════════════════════════════════════════
+function generateNotionExport() {
+  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
+  const pct = score.total > 0 ? Math.round(score.correct / score.total * 100) : 0;
+  const dateLabel = new Date().toLocaleDateString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit'});
+
+  let md = `# 日文練習紀錄 ${dateLabel}\n\n`;
+  md += `**練習成果：** ${score.correct}/${score.total} 題（正確率 ${pct}%）\n\n`;
+
+  // Type breakdown
+  md += `## 題型分析\n`;
+  Object.entries(typeScore).filter(([,v]) => v.total > 0).forEach(([k, v]) => {
+    const p = Math.round(v.correct / v.total * 100);
+    const flag = p < 100 ? ' ⚠️' : ' ✅';
+    md += `- **${typeNames[k]}**：${v.correct}/${v.total}${flag}\n`;
+  });
+  md += '\n---\n\n';
+
+  // Wrong answers
+  const wrong = sessionResults.filter(r => !r.correct);
+  if (wrong.length === 0) {
+    md += `## 🏆 全部答對！太厲害了！\n`;
+  } else {
+    md += `## ❌ 需要複習的題目（${wrong.length} 題）\n\n`;
+    wrong.forEach((r, i) => {
+      const q = r.q;
+      md += `### ${i + 1}. ${q.question}\n`;
+      if (q.type === 'tf') {
+        md += `> **正確答案：** ${q.answer ? '○ 正確' : '× 錯誤'}\n`;
+      } else if (q.type === 'order') {
+        md += `> **正確順序：** ${q.correct_sentence}\n`;
+      } else if (q.options) {
+        md += `> **正確答案：** ${q.options[q.answer]}\n`;
+      }
+      if (q.explanation) md += `\n${q.explanation}\n`;
+      md += `\n*來源：${q.source}*\n\n`;
+    });
+  }
+
+  // Correct answers summary
+  const correct = sessionResults.filter(r => r.correct);
+  if (correct.length > 0) {
+    md += `---\n\n## ✅ 答對的題目（${correct.length} 題）\n`;
+    correct.forEach((r, i) => {
+      md += `${i + 1}. ${r.q.question} *(${r.q.source})*\n`;
+    });
+  }
+
+  return md;
+}
+
+function openExport() {
+  const md = generateNotionExport();
+  document.getElementById('exportText').value = md;
+  document.getElementById('exportModal').classList.add('show');
+}
+
+function closeExport(e) {
+  if (e && e.target !== document.getElementById('exportModal')) return;
+  document.getElementById('exportModal').classList.remove('show');
+}
+
+function copyExport() {
+  const ta = document.getElementById('exportText');
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(ta.value).then(() => {
+      showToast('✅ 已複製到剪貼簿');
+      closeExport();
+    }).catch(() => {
+      document.execCommand('copy');
+      showToast('✅ 已複製到剪貼簿');
+      closeExport();
+    });
+  } else {
+    document.execCommand('copy');
+    showToast('✅ 已複製到剪貼簿');
+    closeExport();
+  }
+}
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+init();
+
+// PWA service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
