@@ -4,123 +4,117 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="日文練習">
-<meta name="theme-color" content="#ffffff">
-<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
 <title>日文練習</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --orange: #E8864A;
-  --orange-bg: #FFF3EB;
-  --orange-border: #F5C9A8;
-  --green: #2ABF7E;
-  --green-bg: #E8F9F2;
-  --red: #E05252;
-  --red-bg: #FEF0F0;
-  --text: #1A1A1A;
-  --text2: #555;
-  --muted: #999;
-  --gray: #F4F4F4;
-  --gray2: #E0E0E0;
-  --card-bg: #fff;
-  --bg: #F7F7F7;
-  --nav-h: 64px;
-  --safe-b: env(safe-area-inset-bottom);
+:root{
+  --orange:#FF9A5C;--orange-bg:rgba(255,154,92,.13);--orange-border:rgba(255,154,92,.3);
+  --green:#34D399;--green-bg:rgba(52,211,153,.13);
+  --red:#F87171;--red-bg:rgba(248,113,113,.13);
+  --blue:#818CF8;--blue-bg:rgba(129,140,248,.13);
+  --purple:#C084FC;--purple-bg:rgba(192,132,252,.13);
+  --cyan:#38BDF8;--cyan-bg:rgba(56,189,248,.13);
+  --amber:#FCD34D;--amber-bg:rgba(252,211,77,.13);
+  --text:#F9FAFB;--text2:#9CA3AF;--muted:#6B7280;
+  --gray:#1F2937;--gray2:#374151;--card-bg:#111827;--bg:#030712;
+  --nav-h:64px;--safe-b:env(safe-area-inset-bottom)
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--text)}
 body{min-height:100dvh;background:var(--bg)}
 
-/* ── PAGES ── */
 .page{display:none;min-height:100dvh;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 8px)}
 .page.active{display:block}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:#fff;border-top:1px solid var(--gray2);display:flex;padding-bottom:var(--safe-b);z-index:200}
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:rgba(17,24,39,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--gray2);display:flex;padding-bottom:var(--safe-b);z-index:200}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;font-size:11px;color:var(--muted);font-family:inherit;cursor:pointer;padding:8px 0}
 .nav-btn.active{color:var(--orange)}
-.nav-btn .nav-icon{font-size:22px;line-height:1}
+.nav-icon{width:24px;height:24px;display:block}
 
-/* ── HOME PAGE ── */
-.home-header{background:#fff;padding:52px 20px 20px;border-bottom:1px solid var(--gray2)}
+/* HOME */
+.home-header{background:var(--card-bg);padding:52px 20px 20px;border-bottom:1px solid var(--gray2)}
 .home-title{font-size:26px;font-weight:700;line-height:1.2}
 .home-title span{color:var(--orange)}
 .home-subtitle{font-size:13px;color:var(--muted);margin-top:4px}
 .home-body{padding:16px 16px 0}
-
 .stats-row{display:flex;gap:10px;margin-bottom:16px}
-.stat-card{flex:1;background:#fff;border-radius:14px;padding:14px 12px;border:1px solid var(--gray2)}
+.stat-card{flex:1;background:var(--card-bg);border-radius:14px;padding:14px 12px;border:1px solid var(--gray2)}
 .stat-num{font-size:26px;font-weight:700;line-height:1}
-.stat-num.orange{color:var(--orange)}
-.stat-num.green{color:var(--green)}
+.stat-num.orange{color:var(--orange)}.stat-num.green{color:var(--green)}
 .stat-label{font-size:11px;color:var(--muted);margin-top:3px}
-
 .section-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
 
-.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.filter-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--text2);background:#fff;cursor:pointer;transition:all .15s;white-space:nowrap}
-.filter-chip.sel{background:var(--orange-bg);color:var(--orange);border-color:var(--orange)}
+/* COUNT CHIPS */
+.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.count-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:7px 16px;font-size:13px;font-weight:500;color:var(--text2);background:var(--card-bg);cursor:pointer;transition:all .15s;white-space:nowrap}
+.count-chip.sel{background:var(--orange-bg);color:var(--orange);border-color:var(--orange)}
 
-.start-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:16px;padding:16px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(232,134,74,.4);letter-spacing:.03em}
+.start-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:16px;padding:16px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(255,154,92,.35);letter-spacing:.03em}
 .start-btn:active{transform:scale(.97)}
-
 .meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 .meta-info{font-size:11px;color:var(--muted)}
 
-.type-breakdown{background:#fff;border-radius:14px;border:1px solid var(--gray2);padding:14px 16px;margin-top:16px}
-.type-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--gray)}
-.type-row:last-child{border-bottom:none}
-.type-name{font-size:14px;font-weight:500}
-.type-count{font-size:13px;color:var(--muted)}
-.type-badge-sm{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-right:6px}
-.badge-fill{background:var(--orange-bg);color:var(--orange)}
-.badge-choice{background:#EEF0FF;color:#5B6BE8}
-.badge-tf{background:var(--green-bg);color:var(--green)}
-.badge-conj{background:#F3E8FF;color:#8B4CF5}
-.badge-order{background:#E6F4FF;color:#2B7CE8}
+/* TYPE BREAKDOWN CARDS */
+.type-breakdown{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.type-card{display:flex;align-items:center;gap:12px;border-radius:14px;padding:13px 16px;border:1px solid var(--gray2)}
+.type-card-fill{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(255,154,92,.1) 100%)}
+.type-card-choice{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(129,140,248,.1) 100%)}
+.type-card-tf{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(52,211,153,.1) 100%)}
+.type-card-conj{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(192,132,252,.1) 100%)}
+.type-card-order{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(56,189,248,.1) 100%)}
+.type-card-counter{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(252,211,77,.1) 100%)}
+.type-icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fill-icon{background:rgba(255,154,92,.18);color:var(--orange)}
+.choice-icon{background:rgba(129,140,248,.18);color:var(--blue)}
+.tf-icon{background:rgba(52,211,153,.18);color:var(--green)}
+.conj-icon{background:rgba(192,132,252,.18);color:var(--purple)}
+.order-icon{background:rgba(56,189,248,.18);color:var(--cyan)}
+.counter-icon{background:rgba(252,211,77,.18);color:var(--amber)}
+.type-info{flex:1;min-width:0}
+.type-name-main{font-size:14px;font-weight:600;color:var(--text)}
+.type-name-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.type-count-num{font-size:14px;font-weight:700;color:var(--text2);flex-shrink:0}
 
-/* ── QUIZ PAGE ── */
-.quiz-topbar{display:flex;align-items:center;justify-content:space-between;padding:52px 16px 12px;background:#fff;border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
-.quiz-back{background:none;border:none;font-size:16px;color:var(--text2);font-family:inherit;cursor:pointer;padding:6px 10px 6px 2px;font-weight:500}
+/* QUIZ PAGE */
+.quiz-topbar{display:flex;align-items:center;justify-content:space-between;padding:52px 16px 12px;background:var(--card-bg);border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
+.quiz-back{background:none;border:none;font-size:15px;color:var(--text2);font-family:inherit;cursor:pointer;padding:6px 10px 6px 2px;font-weight:500;display:flex;align-items:center;gap:4px}
 .quiz-progress{font-size:14px;font-weight:600;color:var(--text2)}
-.quiz-star{background:none;border:none;font-size:22px;cursor:pointer;padding:4px 2px 4px 10px;line-height:1}
-
+.quiz-star{background:none;border:none;cursor:pointer;padding:4px 2px 4px 10px;line-height:1;color:var(--muted);display:flex;align-items:center}
+.quiz-star.starred{color:var(--amber)}
 .progress-wrap{height:3px;background:var(--gray2)}
 .progress-fill{height:3px;background:var(--orange);transition:width .4s}
-
 .quiz-body{padding:16px}
-
 .q-badges{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .q-type-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
 .badge-type-fill{background:var(--orange-bg);color:var(--orange)}
-.badge-type-choice{background:#EEF0FF;color:#5B6BE8}
+.badge-type-choice{background:var(--blue-bg);color:var(--blue)}
 .badge-type-tf{background:var(--green-bg);color:var(--green)}
-.badge-type-conj{background:#F3E8FF;color:#8B4CF5}
-.badge-type-order{background:#E6F4FF;color:#2B7CE8}
+.badge-type-conj{background:var(--purple-bg);color:var(--purple)}
+.badge-type-order{background:var(--cyan-bg);color:var(--cyan)}
+.badge-type-counter{background:var(--amber-bg);color:var(--amber)}
 .q-source{font-size:11px;color:var(--muted);padding:3px 9px;background:var(--gray);border-radius:99px}
-
-.q-card{background:#fff;border-radius:18px;padding:20px;border:1px solid var(--gray2);margin-bottom:16px}
+.q-card{background:var(--card-bg);border-radius:18px;padding:20px;border:1px solid var(--gray2);margin-bottom:16px}
 .q-category{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
 .q-text{font-size:17px;font-weight:500;line-height:1.6;color:var(--text)}
 .q-sentence{font-size:18px;font-weight:600;line-height:1.7;margin-top:8px;color:var(--text)}
 .blank{display:inline-block;min-width:52px;height:26px;border-bottom:2.5px solid var(--orange);text-align:center;vertical-align:middle;font-size:16px;font-weight:700;color:var(--orange);line-height:26px}
 .blank.filled{border-color:transparent;background:var(--orange-bg);border-radius:6px;padding:0 6px}
-.blank-hint{font-size:12px;color:var(--muted);margin-top:6px}
 
-/* Answer areas */
+/* OPTIONS */
 .chip-grid{display:flex;gap:10px;flex-wrap:wrap}
-.chip-opt{flex:1;min-width:calc(50% - 5px);background:#fff;border:2px solid var(--gray2);border-radius:12px;padding:13px 10px;font-size:17px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text)}
+.chip-opt{flex:1;min-width:calc(50% - 5px);background:var(--card-bg);border:2px solid var(--gray2);border-radius:12px;padding:13px 10px;font-size:17px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text)}
 .chip-opt:active:not(.locked){transform:scale(.95)}
 .chip-opt.selected{border-color:var(--orange);background:var(--orange-bg);color:var(--orange)}
 .chip-opt.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
 .chip-opt.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
 .chip-opt.locked{cursor:default}
-
 .choice-list{display:flex;flex-direction:column;gap:10px}
-.choice-opt{background:#fff;border:2px solid var(--gray2);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:500;text-align:left;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text);display:flex;align-items:center;gap:10px}
+.choice-opt{background:var(--card-bg);border:2px solid var(--gray2);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:500;text-align:left;cursor:pointer;font-family:inherit;transition:all .15s;color:var(--text);display:flex;align-items:center;gap:10px}
 .choice-opt:active:not(.locked){background:var(--gray)}
 .choice-letter{font-size:12px;font-weight:700;color:var(--muted);min-width:18px}
 .choice-opt.selected{border-color:var(--orange);background:var(--orange-bg)}
@@ -132,49 +126,43 @@ body{min-height:100dvh;background:var(--bg)}
 .choice-opt.reveal{border-color:var(--green);background:var(--green-bg)}
 .choice-opt.reveal .choice-letter{color:var(--green)}
 .choice-opt.locked{cursor:default}
-
 .tf-row{display:flex;gap:12px}
-.tf-btn{flex:1;border:2px solid var(--gray2);border-radius:16px;padding:20px 10px;font-size:32px;text-align:center;cursor:pointer;background:#fff;font-family:inherit;transition:all .15s}
+.tf-btn{flex:1;border:2px solid var(--gray2);border-radius:16px;padding:20px 10px;font-size:32px;text-align:center;cursor:pointer;background:var(--card-bg);font-family:inherit;transition:all .15s}
 .tf-btn:active:not(.locked){transform:scale(.95)}
 .tf-label{font-size:13px;font-weight:600;color:var(--muted);display:block;margin-top:4px}
-.tf-btn.selected-t{border-color:var(--orange);background:var(--orange-bg)}
-.tf-btn.selected-t .tf-label{color:var(--orange)}
-.tf-btn.selected-f{border-color:var(--orange);background:var(--orange-bg)}
-.tf-btn.selected-f .tf-label{color:var(--orange)}
+.tf-btn.selected-t,.tf-btn.selected-f{border-color:var(--orange);background:var(--orange-bg)}
+.tf-btn.selected-t .tf-label,.tf-btn.selected-f .tf-label{color:var(--orange)}
 .tf-btn.correct{border-color:var(--green);background:var(--green-bg)}
 .tf-btn.correct .tf-label{color:var(--green)}
 .tf-btn.wrong{border-color:var(--red);background:var(--red-bg)}
 .tf-btn.wrong .tf-label{color:var(--red)}
 .tf-btn.locked{cursor:default}
 
-/* Feedback */
-.feedback-card{background:#fff;border-radius:16px;border:2px solid var(--gray2);padding:16px;margin-top:0;display:none}
+/* FEEDBACK */
+.feedback-card{background:var(--card-bg);border-radius:16px;border:2px solid var(--gray2);padding:16px;margin-top:0;display:none}
 .feedback-card.show{display:block}
 .feedback-card.correct-fb{border-color:var(--green)}
 .feedback-card.wrong-fb{border-color:var(--red)}
 .feedback-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .feedback-icon{font-size:20px}
 .feedback-result{font-size:15px;font-weight:700}
-.feedback-result.ok{color:var(--green)}
-.feedback-result.ng{color:var(--red)}
+.feedback-result.ok{color:var(--green)}.feedback-result.ng{color:var(--red)}
 .feedback-explain{font-size:13px;line-height:1.65;color:var(--text2);white-space:pre-line}
-
-.next-btn{width:100%;background:var(--text);color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;transition:transform .15s}
+.next-btn{width:100%;background:var(--gray);color:var(--text);border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;transition:transform .15s}
 .next-btn:active{transform:scale(.97)}
-.next-btn.orange-btn{background:var(--orange)}
+.next-btn.orange-btn{background:var(--orange);color:#fff}
 
-/* ── COMPLETE PAGE ── */
+/* COMPLETE */
 .complete-wrap{padding:52px 20px 24px;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
-.complete-emoji{font-size:72px;line-height:1}
+.complete-icon{width:80px;height:80px;margin-bottom:4px}
 .complete-title{font-size:24px;font-weight:700;text-align:center}
 .complete-score{font-size:52px;font-weight:700;color:var(--orange);text-align:center;line-height:1}
 .complete-denom{font-size:20px;color:var(--muted);font-weight:500}
 .complete-pct{font-size:16px;color:var(--text2);font-weight:600}
-.complete-breakdown{background:#fff;border-radius:16px;border:1px solid var(--gray2);width:100%;padding:14px 16px;margin-top:4px}
+.complete-breakdown{background:var(--card-bg);border-radius:16px;border:1px solid var(--gray2);width:100%;padding:14px 16px;margin-top:4px}
 .cb-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray);font-size:14px}
 .cb-row:last-child{border-bottom:none}
-.cb-label{color:var(--text2)}
-.cb-score{font-weight:700}
+.cb-label{color:var(--text2)}.cb-score{font-weight:700}
 .cb-score.perfect{color:var(--green)}
 .complete-btns{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
 .complete-btn{width:100%;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:transform .15s}
@@ -182,52 +170,53 @@ body{min-height:100dvh;background:var(--bg)}
 .btn-primary{background:var(--orange);color:#fff}
 .btn-secondary{background:var(--gray);color:var(--text)}
 
-/* ── FAVORITES PAGE ── */
-.fav-header{padding:52px 20px 16px;background:#fff;border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
+/* FAVORITES */
+.fav-header{padding:52px 20px 16px;background:var(--card-bg);border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
 .fav-title{font-size:22px;font-weight:700}
 .fav-subtitle{font-size:13px;color:var(--muted);margin-top:2px}
 .fav-body{padding:16px}
 .fav-empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .fav-empty-icon{font-size:48px;margin-bottom:10px}
 .fav-empty-text{font-size:14px}
-.fav-item{background:#fff;border-radius:14px;border:1px solid var(--gray2);padding:14px 16px;margin-bottom:10px}
+.fav-item{background:var(--card-bg);border-radius:14px;border:1px solid var(--gray2);padding:14px 16px;margin-bottom:10px}
 .fav-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .fav-q-text{font-size:14px;font-weight:500;line-height:1.5;flex:1}
-.fav-unstar{background:none;border:none;font-size:20px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
+.fav-unstar{background:none;border:none;font-size:20px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;color:var(--amber)}
 .fav-answer{font-size:12px;color:var(--green);font-weight:600;margin-top:6px}
 .fav-badges{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
 .fav-src{font-size:10px;color:var(--muted);background:var(--gray);border-radius:99px;padding:2px 7px}
 
-/* ── SUGGEST MODAL ── */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end}
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:flex-end}
 .modal-backdrop.show{display:flex}
-.modal-sheet{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px calc(24px + var(--safe-b));width:100%;max-height:80dvh;overflow-y:auto}
+.modal-sheet{background:var(--card-bg);border-radius:20px 20px 0 0;padding:24px 20px calc(24px + var(--safe-b));width:100%;max-height:80dvh;overflow-y:auto;border-top:1px solid var(--gray2)}
 .modal-handle{width:40px;height:4px;background:var(--gray2);border-radius:99px;margin:0 auto 20px}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:6px}
 .modal-desc{font-size:13px;color:var(--muted);margin-bottom:16px}
-.modal-textarea{width:100%;border:1.5px solid var(--gray2);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;resize:none;min-height:100px;line-height:1.5;color:var(--text)}
+.modal-textarea{width:100%;border:1.5px solid var(--gray2);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;resize:none;min-height:100px;line-height:1.5;color:var(--text);background:var(--gray)}
 .modal-textarea:focus{outline:none;border-color:var(--orange)}
 .modal-btns{display:flex;gap:10px;margin-top:12px}
 .modal-cancel{flex:1;background:var(--gray);color:var(--text);border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
 .modal-submit{flex:2;background:var(--orange);color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+.modal-danger{flex:2;background:var(--red);color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .25s;white-space:nowrap;pointer-events:none}
+/* TOAST */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--gray);color:var(--text);border:1px solid var(--gray2);border-radius:99px;padding:9px 18px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .25s;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── CONJUGATION ── */
-.conj-display{background:var(--orange-bg);border-radius:16px;padding:18px 20px 14px;text-align:center;margin-top:12px}
+/* CONJUGATION / COUNTER DISPLAY */
+.conj-display{background:var(--gray);border-radius:16px;padding:18px 20px 14px;text-align:center;margin-top:12px}
 .conj-verb{font-size:36px;font-weight:700;color:var(--text);line-height:1.2}
 .conj-arrow{font-size:13px;color:var(--muted);margin:6px 0 2px}
-.conj-label{font-size:15px;font-weight:700;color:var(--orange);background:#fff;border-radius:99px;display:inline-block;padding:4px 16px;margin-top:2px}
+.conj-label{font-size:15px;font-weight:700;color:var(--orange);background:var(--gray2);border-radius:99px;display:inline-block;padding:4px 16px;margin-top:2px}
 
-/* ── ORDER ── */
+/* ORDER */
 .order-placed{min-height:62px;background:var(--gray);border-radius:14px;padding:12px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;border:2px dashed var(--gray2);align-items:center}
-.order-placed.has-words{background:#fff;border-style:solid}
+.order-placed.has-words{background:var(--card-bg);border-style:solid}
 .order-placed-hint{font-size:13px;color:var(--muted)}
-.order-word{border-radius:10px;padding:9px 14px;font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;border:2px solid var(--gray2);background:#fff;font-family:inherit;color:var(--text)}
+.order-word{border-radius:10px;padding:9px 14px;font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;border:2px solid var(--gray2);background:var(--card-bg);font-family:inherit;color:var(--text)}
 .order-word:active:not(.locked){opacity:.7;transform:scale(.95)}
-.order-word.avail{background:#fff;border-color:var(--gray2)}
+.order-word.avail{background:var(--card-bg);border-color:var(--gray2)}
 .order-word.placed{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
 .order-word.correct-w{background:var(--green-bg);border-color:var(--green);color:var(--green)}
 .order-word.wrong-w{background:var(--red-bg);border-color:var(--red);color:var(--red)}
@@ -235,19 +224,23 @@ body{min-height:100dvh;background:var(--bg)}
 .order-available{display:flex;flex-wrap:wrap;gap:8px;margin-top:0}
 .order-section-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-bottom:6px}
 
-/* no quiz page nav */
-#page-quiz .bottom-nav-placeholder{height:0}
-
-/* ── EXPORT MODAL ── */
+/* EXPORT */
 .export-textarea{width:100%;border:1.5px solid var(--gray2);border-radius:12px;padding:12px;font-size:12px;font-family:'Courier New',monospace;resize:none;min-height:220px;line-height:1.5;color:var(--text);background:var(--gray)}
-.export-textarea:focus{outline:none;border-color:var(--orange)}
 .copy-btn{flex:2;background:var(--green);color:#fff;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
-.copy-btn:active{opacity:.8}
+
+/* BADGES (home) */
+.type-badge-sm{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-right:6px}
+.badge-fill{background:var(--orange-bg);color:var(--orange)}
+.badge-choice{background:var(--blue-bg);color:var(--blue)}
+.badge-tf{background:var(--green-bg);color:var(--green)}
+.badge-conj{background:var(--purple-bg);color:var(--purple)}
+.badge-order{background:var(--cyan-bg);color:var(--cyan)}
+.badge-counter{background:var(--amber-bg);color:var(--amber)}
 </style>
 </head>
 <body>
 
-<!-- ── HOME PAGE ── -->
+<!-- HOME PAGE -->
 <div class="page active" id="page-home">
   <div class="home-header">
     <div class="home-title">日文<span>練習</span></div>
@@ -265,62 +258,83 @@ body{min-height:100dvh;background:var(--bg)}
       </div>
       <div class="stat-card">
         <div class="stat-num" id="statStreak">0</div>
-        <div class="stat-label">🔥 連續天</div>
+        <div class="stat-label">連續天</div>
       </div>
+    </div>
+
+    <div class="section-label">每次練習題數</div>
+    <div class="count-row">
+      <button class="count-chip sel" data-count="10" onclick="setCount(10)">10 題</button>
+      <button class="count-chip" data-count="20" onclick="setCount(20)">20 題</button>
+      <button class="count-chip" data-count="30" onclick="setCount(30)">30 題</button>
+      <button class="count-chip" data-count="0" onclick="setCount(0)">全部</button>
     </div>
 
     <button class="start-btn" id="startBtn" onclick="startQuiz()">開始練習</button>
 
     <div class="meta-row">
       <div class="meta-info" id="metaInfo">載入中…</div>
-      <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">💡 建議功能</button>
+      <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">建議功能</button>
     </div>
 
-    <div class="type-breakdown" id="typeBreakdown" style="margin-top:16px">
-      <div class="type-row">
-        <div class="type-name"><span class="type-badge-sm badge-fill">填空</span>助詞 / 文法挖空</div>
-        <div class="type-count" id="countFill">—</div>
+    <div class="type-breakdown" id="typeBreakdown">
+      <div class="type-card type-card-fill">
+        <div class="type-icon-wrap fill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+        <div class="type-info"><div class="type-name-main">填空</div><div class="type-name-sub">助詞・文法挖空</div></div>
+        <div class="type-count-num" id="countFill">—</div>
       </div>
-      <div class="type-row">
-        <div class="type-name"><span class="type-badge-sm badge-choice">選擇</span>讀音 / 用法</div>
-        <div class="type-count" id="countChoice">—</div>
+      <div class="type-card type-card-choice">
+        <div class="type-icon-wrap choice-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="type-info"><div class="type-name-main">選擇</div><div class="type-name-sub">讀音・用法</div></div>
+        <div class="type-count-num" id="countChoice">—</div>
       </div>
-      <div class="type-row">
-        <div class="type-name"><span class="type-badge-sm badge-tf">是非</span>正誤判斷</div>
-        <div class="type-count" id="countTF">—</div>
+      <div class="type-card type-card-tf">
+        <div class="type-icon-wrap tf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="type-info"><div class="type-name-main">是非</div><div class="type-name-sub">正誤判斷</div></div>
+        <div class="type-count-num" id="countTF">—</div>
       </div>
-      <div class="type-row">
-        <div class="type-name"><span class="type-badge-sm badge-conj">動詞変化</span>て形 / ない形 / た形</div>
-        <div class="type-count" id="countConj">—</div>
+      <div class="type-card type-card-conj">
+        <div class="type-icon-wrap conj-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+        <div class="type-info"><div class="type-name-main">動詞変化</div><div class="type-name-sub">て形・ない形・た形 等</div></div>
+        <div class="type-count-num" id="countConj">—</div>
       </div>
-      <div class="type-row">
-        <div class="type-name"><span class="type-badge-sm badge-order">排序</span>語句排列</div>
-        <div class="type-count" id="countOrder">—</div>
+      <div class="type-card type-card-order">
+        <div class="type-icon-wrap order-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="8" y2="18"/></svg></div>
+        <div class="type-info"><div class="type-name-main">排序</div><div class="type-name-sub">語句排列</div></div>
+        <div class="type-count-num" id="countOrder">—</div>
+      </div>
+      <div class="type-card type-card-counter">
+        <div class="type-icon-wrap counter-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div>
+        <div class="type-info"><div class="type-name-main">量詞</div><div class="type-name-sub">助数詞の読み方</div></div>
+        <div class="type-count-num" id="countCounter">—</div>
       </div>
     </div>
+    <div style="height:16px"></div>
   </div>
 </div>
 
-<!-- ── QUIZ PAGE ── -->
+<!-- QUIZ PAGE -->
 <div class="page" id="page-quiz">
   <div class="quiz-topbar">
-    <button class="quiz-back" onclick="confirmLeave()">← 離開</button>
-    <div class="quiz-progress" id="quizProgress">1 / 28</div>
-    <button class="quiz-star" id="quizStar" onclick="toggleStar()">☆</button>
+    <button class="quiz-back" onclick="confirmLeave()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      離開
+    </button>
+    <div class="quiz-progress" id="quizProgress">1 / 10</div>
+    <button class="quiz-star" id="quizStar" onclick="toggleStar()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </button>
   </div>
   <div class="progress-wrap">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
-
-  <div class="quiz-body" id="quizBody">
-    <!-- filled dynamically -->
-  </div>
+  <div class="quiz-body" id="quizBody"></div>
 </div>
 
-<!-- ── COMPLETE PAGE ── -->
+<!-- COMPLETE PAGE -->
 <div class="page" id="page-complete">
   <div class="complete-wrap">
-    <div class="complete-emoji" id="completeEmoji">🎉</div>
+    <div class="complete-icon" id="completeEmoji"></div>
     <div class="complete-title">練習完成！</div>
     <div>
       <span class="complete-score" id="completeCorrect">0</span>
@@ -330,17 +344,17 @@ body{min-height:100dvh;background:var(--bg)}
     <div class="complete-breakdown" id="completeBreakdown"></div>
     <div class="complete-btns">
       <button class="complete-btn btn-primary" onclick="restartQuiz()">再練習一輪</button>
-      <button class="complete-btn btn-secondary" onclick="openExport()">📋 匯出記錄</button>
+      <button class="complete-btn btn-secondary" onclick="openExport()">匯出記錄</button>
       <button class="complete-btn btn-secondary" onclick="switchPage('home')">返回首頁</button>
     </div>
   </div>
 </div>
 
-<!-- ── EXPORT MODAL ── -->
+<!-- EXPORT MODAL -->
 <div class="modal-backdrop" id="exportModal" onclick="closeExport(event)">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title">📋 匯出練習記錄</div>
+    <div class="modal-title">匯出練習記錄</div>
     <div class="modal-desc">複製以下內容，貼到 Notion 或其他筆記工具。</div>
     <textarea class="export-textarea" id="exportText" readonly></textarea>
     <div class="modal-btns">
@@ -350,32 +364,45 @@ body{min-height:100dvh;background:var(--bg)}
   </div>
 </div>
 
-<!-- ── FAVORITES PAGE ── -->
+<!-- FAVORITES PAGE -->
 <div class="page" id="page-fav">
   <div class="fav-header">
-    <div class="fav-title">★ 收藏的題目</div>
+    <div class="fav-title">收藏的題目</div>
     <div class="fav-subtitle" id="favSubtitle">0 題</div>
   </div>
   <div class="fav-body" id="favBody"></div>
 </div>
 
-<!-- ── BOTTOM NAV (hidden during quiz) ── -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">
-    <span class="nav-icon">📚</span>
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     <span>練習</span>
   </button>
   <button class="nav-btn" id="nav-fav" onclick="switchPage('fav')">
-    <span class="nav-icon">★</span>
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     <span>收藏</span>
   </button>
 </nav>
 
-<!-- ── SUGGEST MODAL ── -->
+<!-- LEAVE MODAL -->
+<div class="modal-backdrop" id="leaveModal" onclick="closeLeaveModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">離開練習？</div>
+    <div class="modal-desc">目前的進度不會儲存。</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeLeaveModal()">繼續練習</button>
+      <button class="modal-danger" onclick="leaveQuiz()">確定離開</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUGGEST MODAL -->
 <div class="modal-backdrop" id="suggestModal" onclick="closeSuggest(event)">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title">💡 建議功能</div>
+    <div class="modal-title">建議功能</div>
     <div class="modal-desc">有什麼想法或建議？寫下來，之後 Claude 會看到。</div>
     <textarea class="modal-textarea" id="suggestText" placeholder="例如：增加動詞變化的題目、增加聽力練習…"></textarea>
     <div class="modal-btns">
@@ -385,7 +412,6 @@ body{min-height:100dvh;background:var(--bg)}
   </div>
 </div>
 
-<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -393,9 +419,9 @@ body{min-height:100dvh;background:var(--bg)}
 // Last updated: 2026-11-22 | Sources: SHUHARI 11/20, SHUHARI 11/06, 兩個傻瓜 10/09, 兩個傻瓜 08/10
 window.QUIZ_DATA = {
   meta: {
-    generated_at: "2026-11-22",
+    generated_at: "2026-11-23",
     sources: ["SHUHARI JAPANESE 2026-11-20", "SHUHARI JAPANESE 2026-11-06", "兩個傻瓜 2026-10-09", "兩個傻瓜 2026-08-10"],
-    total: 113
+    total: 138
   },
   questions: [
     // ── VOCABULARY READINGS ──────────────────────────────
@@ -1746,7 +1772,35 @@ window.QUIZ_DATA = {
       answer_order: [0, 2, 1],
       correct_sentence: "4桁の暗証番号を設定してください。",
       explanation: "「〜てください」の語順：〔修飾語〕→〔目的語〕→〔動詞てください〕。「4桁の」（修飾）→「暗証番号を」（目的語）→「設定してください」（動詞）。"
-    }
+    },
+
+    // ── COUNTER (量詞) cnt001-cnt015 ────────────────────
+    {id:"cnt001",type:"counter",category:"counter",source:"助数詞",question:"えんぴつ1本の正しい読み方は？",display:"えんぴつ 1本",options:["いちほん","いっぽん","ひとほん","いちぼん"],answer:1,explanation:"1本（いっぽん）：「本（ほん）」計算細長形物品。數字 1・6・8・10 後面變成「ぽん」。"},
+    {id:"cnt002",type:"counter",category:"counter",source:"助数詞",question:"えんぴつ3本の正しい読み方は？",display:"えんぴつ 3本",options:["さんほん","みっぽん","さんぼん","みほん"],answer:2,explanation:"3本（さんぼん）：數字 3 後面「本」發音變成「ぼん」（濁音）。"},
+    {id:"cnt003",type:"counter",category:"counter",source:"助数詞",question:"ビール6本の正しい読み方は？",display:"ビール 6本",options:["ろくほん","ろっぼん","ろっぽん","むほん"],answer:2,explanation:"6本（ろっぽん）：數字 6 後「本」變成「ぽん」（促音＋半濁音）。"},
+    {id:"cnt004",type:"counter",category:"counter",source:"助数詞",question:"かみ1枚の正しい読み方は？",display:"かみ 1枚",options:["いちまい","ひとまい","いちばい","いちはい"],answer:0,explanation:"1枚（いちまい）：「枚（まい）」計算薄平的東西，如紙、切符。讀音比較規則。"},
+    {id:"cnt005",type:"counter",category:"counter",source:"助数詞",question:"きって3枚の正しい読み方は？",display:"きって 3枚",options:["みまい","さんまい","さんばい","みっまい"],answer:1,explanation:"3枚（さんまい）：「枚（まい）」的讀音很規則，不會像「本」一樣有音變。"},
+    {id:"cnt006",type:"counter",category:"counter",source:"助数詞",question:"ほん1冊の正しい読み方は？",display:"ほん 1冊",options:["いちさつ","いっさつ","ひとさつ","いちだつ"],answer:1,explanation:"1冊（いっさつ）：「冊（さつ）」計算書籍。數字 1 後促音化：「いっさつ」。"},
+    {id:"cnt007",type:"counter",category:"counter",source:"助数詞",question:"ほん2冊の正しい読み方は？",display:"ほん 2冊",options:["にっさつ","ふたさつ","にさつ","にざつ"],answer:2,explanation:"2冊（にさつ）：數字 2 後「冊」發音維持「さつ」，不促音化。"},
+    {id:"cnt008",type:"counter",category:"counter",source:"助数詞",question:"ねこ1匹の正しい読み方は？",display:"ねこ 1匹",options:["いちひき","いっぴき","ひとひき","いちびき"],answer:1,explanation:"1匹（いっぴき）：「匹（ひき）」計算小型動物。1匹→促音「いっぴき」。"},
+    {id:"cnt009",type:"counter",category:"counter",source:"助数詞",question:"いぬ3匹の正しい読み方は？",display:"いぬ 3匹",options:["さんひき","みっぴき","さんびき","みひき"],answer:2,explanation:"3匹（さんびき）：「匹」數字 3 後濁音化→「さんびき」。"},
+    {id:"cnt010",type:"counter",category:"counter",source:"助数詞",question:"1人の正しい読み方は？",display:"1人",options:["いちにん","ひとり","いちじん","いちひと"],answer:1,explanation:"1人（ひとり）：1人・2人 是特殊讀法。從 3人才用「さんにん…」。"},
+    {id:"cnt011",type:"counter",category:"counter",source:"助数詞",question:"2人の正しい読み方は？",display:"2人",options:["ふたにん","にひと","にじん","ふたり"],answer:3,explanation:"2人（ふたり）：1人（ひとり）・2人（ふたり）是特殊讀法。"},
+    {id:"cnt012",type:"counter",category:"counter",source:"助数詞",question:"5人の正しい読み方は？",display:"5人",options:["ごひと","いつにん","ごにん","いつり"],answer:2,explanation:"5人（ごにん）：3人以後使用「〜にん」讀法。4人（よにん）・7人（しちにん）。"},
+    {id:"cnt013",type:"counter",category:"counter",source:"助数詞",question:"コーヒー1杯の正しい読み方は？",display:"コーヒー 1杯",options:["いちはい","いっぱい","ひとはい","いちばい"],answer:1,explanation:"1杯（いっぱい）：「杯（はい）」計算飲料。1杯→「いっぱい」（促音＋半濁音）。"},
+    {id:"cnt014",type:"counter",category:"counter",source:"助数詞",question:"みそしる3杯の正しい読み方は？",display:"みそしる 3杯",options:["さんはい","みっぱい","さんばい","みはい"],answer:2,explanation:"3杯（さんばい）：「杯」數字 3 後濁音化→「さんばい」。"},
+    {id:"cnt015",type:"counter",category:"counter",source:"助数詞",question:"くるま2台の正しい読み方は？",display:"くるま 2台",options:["にたい","ふただい","にだい","にたいき"],answer:2,explanation:"2台（にだい）：「台（だい）」計算機器、車輛。讀音比較規則。"},
+    // ── 追加動詞変化 v052-v061 ────────────────────────────
+    {id:"v052",type:"conjugation",verb:"見る",conjugation_type:"ます形",source:"動詞変化",question:"「見る」をます形に変えてください。",options:["みります","みます","みいます","みええます"],answer:1,explanation:"見る（みる）→ 見ます（みます）：一段動詞（Group 2），「る」→「ます」。"},
+    {id:"v053",type:"conjugation",verb:"起きる",conjugation_type:"ます形",source:"動詞変化",question:"「起きる」をます形に変えてください。",options:["おきます","おきります","おきえます","おきいます"],answer:0,explanation:"起きる（おきる）→ 起きます（おきます）：一段動詞（Group 2）。"},
+    {id:"v054",type:"conjugation",verb:"食べる",conjugation_type:"ます形（否定）",source:"動詞変化",question:"「食べる」のます形否定はどれですか？",options:["たべません","たべないます","たべないです","たべぬです"],answer:0,explanation:"食べる → 食べません：ます形の否定形は「ます」→「ません」。"},
+    {id:"v055",type:"conjugation",verb:"行く",conjugation_type:"ます形（否定）",source:"動詞変化",question:"「行く」のます形否定はどれですか？",options:["いきません","いかません","いきないます","いかないます"],answer:0,explanation:"行く → 行きません：五段動詞（Group 1），く→き（い段）→きません。"},
+    {id:"v056",type:"conjugation",verb:"飲む",conjugation_type:"受身形",source:"動詞変化",question:"「飲む」の受身形はどれですか？",options:["のまれる","のめれる","のみれる","のむれる"],answer:0,explanation:"飲む → 飲まれる：五段動詞（Group 1）の受身形は「あ段＋れる」。む→まれる。"},
+    {id:"v057",type:"conjugation",verb:"書く",conjugation_type:"受身形",source:"動詞変化",question:"「書く」の受身形はどれですか？",options:["かきれる","かかれる","かけれる","かくれる"],answer:1,explanation:"書く → 書かれる：五段動詞のく→か（あ段）＋れる。"},
+    {id:"v058",type:"conjugation",verb:"食べる",conjugation_type:"使役形",source:"動詞変化",question:"「食べる」の使役形はどれですか？",options:["たべさせる","たべらせる","たべさせます","たべあせる"],answer:0,explanation:"食べる → 食べさせる：一段動詞（Group 2）の使役形は「る」→「させる」。"},
+    {id:"v059",type:"conjugation",verb:"住む",conjugation_type:"て形＋いる",source:"動詞変化",question:"「住む」のて形＋いる（居住状態）はどれですか？",options:["すみています","すんでいます","すんでます","すみます"],answer:1,explanation:"住む → 住んでいます：む→んで（て形）＋います。表示持續居住的狀態。"},
+    {id:"v060",type:"conjugation",verb:"知る",conjugation_type:"て形＋いる",source:"動詞変化",question:"「知る」のて形＋いる（知っている状態）はどれですか？",options:["しっています","しています","しりています","しんでいます"],answer:0,explanation:"知る → 知っています：五段動詞（る→って）＋います。表示知道某事的狀態。"},
+    {id:"v061",type:"conjugation",verb:"来る（くる）",conjugation_type:"て形＋いる",source:"動詞変化",question:"「来る」のて形＋いる（現在の移動）はどれですか？",options:["くています","きています","こいています","くるています"],answer:1,explanation:"来る（くる）→ 来て（きて）＋います＝来ています（きています）：不規則動詞。"},
   ]
 };
 
@@ -1756,21 +1810,21 @@ window.QUIZ_DATA = {
 // STATE
 // ═══════════════════════════════════════════
 let allQuestions = [];
-let deck = [];           // current quiz deck
+let deck = [];
 let currentIdx = 0;
 let answered = false;
+let quizCount = 10;
 let score = { correct: 0, total: 0 };
-let typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0} };
+let typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0}, counter:{c:0,t:0} };
 let orderPlaced = [];
 let orderAvailable = [];
-let sessionResults = []; // { q, correct } per question in current session
+let sessionResults = [];
 
 let starred = new Set(JSON.parse(localStorage.getItem('jq_starred') || '[]'));
 let todayStats = JSON.parse(localStorage.getItem('jq_today') || '{"date":"","correct":0,"total":0}');
 let streak = parseInt(localStorage.getItem('jq_streak') || '0');
 let suggests = JSON.parse(localStorage.getItem('jq_suggests') || '[]');
 
-// Fix today's stats if stale
 const today = new Date().toISOString().slice(0,10);
 if (todayStats.date !== today) todayStats = { date: today, correct: 0, total: 0 };
 
@@ -1779,7 +1833,7 @@ if (todayStats.date !== today) todayStats = { date: today, correct: 0, total: 0 
 // ═══════════════════════════════════════════
 function init() {
   if (!window.QUIZ_DATA) {
-    document.getElementById('metaInfo').textContent = '❌ 無法載入題目，請確認 questions.js 在同一資料夾';
+    document.getElementById('metaInfo').textContent = '無法載入題目';
     return;
   }
   allQuestions = window.QUIZ_DATA.questions;
@@ -1787,6 +1841,7 @@ function init() {
   updateTypeCounts();
   document.getElementById('metaInfo').textContent =
     `更新：${window.QUIZ_DATA.meta.generated_at} · 共 ${allQuestions.length} 題`;
+  updateStartBtn();
 }
 
 function updateHomeStats() {
@@ -1798,12 +1853,26 @@ function updateHomeStats() {
 
 function updateTypeCounts() {
   const qs = allQuestions;
-  document.getElementById('countFill').textContent = qs.filter(q => q.type === 'fill').length + ' 題';
-  document.getElementById('countChoice').textContent = qs.filter(q => q.type === 'choice').length + ' 題';
-  document.getElementById('countTF').textContent = qs.filter(q => q.type === 'tf').length + ' 題';
-  document.getElementById('countConj').textContent = qs.filter(q => q.type === 'conjugation').length + ' 題';
-  document.getElementById('countOrder').textContent = qs.filter(q => q.type === 'order').length + ' 題';
-  document.getElementById('startBtn').textContent = `開始練習（${qs.length} 題）`;
+  document.getElementById('countFill').textContent = qs.filter(q => q.type === 'fill').length;
+  document.getElementById('countChoice').textContent = qs.filter(q => q.type === 'choice').length;
+  document.getElementById('countTF').textContent = qs.filter(q => q.type === 'tf').length;
+  document.getElementById('countConj').textContent = qs.filter(q => q.type === 'conjugation').length;
+  document.getElementById('countOrder').textContent = qs.filter(q => q.type === 'order').length;
+  document.getElementById('countCounter').textContent = qs.filter(q => q.type === 'counter').length;
+}
+
+function setCount(n) {
+  quizCount = n;
+  document.querySelectorAll('.count-chip').forEach(c => {
+    c.classList.toggle('sel', parseInt(c.dataset.count) === n);
+  });
+  updateStartBtn();
+}
+
+function updateStartBtn() {
+  const total = allQuestions.length;
+  const n = quizCount === 0 ? total : Math.min(quizCount, total);
+  document.getElementById('startBtn').textContent = `開始練習`;
 }
 
 // ═══════════════════════════════════════════
@@ -1825,11 +1894,12 @@ function switchPage(name) {
 // ═══════════════════════════════════════════
 function startQuiz() {
   const qs = [...allQuestions];
-  if (!qs.length) { showToast('沒有符合條件的題目'); return; }
-  deck = shuffle([...qs]);
+  if (!qs.length) { showToast('沒有題目'); return; }
+  const n = quizCount === 0 ? qs.length : Math.min(quizCount, qs.length);
+  deck = shuffle([...qs]).slice(0, n);
   currentIdx = 0;
   score = { correct: 0, total: 0 };
-  typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0} };
+  typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c:0,t:0}, order:{c:0,t:0}, counter:{c:0,t:0} };
   sessionResults = [];
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-quiz').classList.add('active');
@@ -1837,38 +1907,42 @@ function startQuiz() {
   renderQuestion();
 }
 
-function restartQuiz() {
-  startQuiz();
-}
+function restartQuiz() { startQuiz(); }
 
 function renderQuestion() {
   const q = deck[currentIdx];
   answered = false;
   const total = deck.length;
-
   document.getElementById('quizProgress').textContent = `${currentIdx + 1} / ${total}`;
   document.getElementById('progressFill').style.width = `${(currentIdx / total) * 100}%`;
-  document.getElementById('quizStar').textContent = starred.has(q.id) ? '★' : '☆';
+  const starBtn = document.getElementById('quizStar');
+  const isStarred = starred.has(q.id);
+  starBtn.className = 'quiz-star' + (isStarred ? ' starred' : '');
+  starBtn.innerHTML = isStarred
+    ? `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+    : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
-  const typeBadge = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' }[q.type] || q.type;
-  const typeClass = { fill:'badge-type-fill', choice:'badge-type-choice', tf:'badge-type-tf', conjugation:'badge-type-conj', order:'badge-type-order' }[q.type] || '';
+  const typeBadge = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序', counter:'量詞' }[q.type] || q.type;
+  const typeClass = { fill:'badge-type-fill', choice:'badge-type-choice', tf:'badge-type-tf', conjugation:'badge-type-conj', order:'badge-type-order', counter:'badge-type-counter' }[q.type] || '';
 
   let answerHTML = '';
   if (q.type === 'fill') {
     const sentenceHTML = q.sentence.replace('___', `<span class="blank" id="blankSpan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
     answerHTML = `<div class="q-sentence">${sentenceHTML}</div>`;
   } else if (q.type === 'conjugation') {
-    answerHTML = `
-      <div class="conj-display">
-        <div class="conj-verb">${q.verb}</div>
-      </div>
-    `;
-  } else {
-    answerHTML = '';
+    answerHTML = `<div class="conj-display">
+      <div class="conj-verb">${q.verb}</div>
+      <div class="conj-arrow">↓ 請選出正確的「${q.conjugation_type}」</div>
+    </div>`;
+  } else if (q.type === 'counter') {
+    answerHTML = `<div class="conj-display" style="background:var(--amber-bg)">
+      <div class="conj-verb">${q.display}</div>
+      <div class="conj-arrow">↓ 正確的讀法是？</div>
+    </div>`;
   }
 
   let optionsHTML = '';
-  if (q.type === 'fill' || q.type === 'conjugation') {
+  if (q.type === 'fill' || q.type === 'conjugation' || q.type === 'counter') {
     optionsHTML = `<div class="chip-grid" id="optionArea">
       ${q.options.map((o,i) => `<button class="chip-opt" data-idx="${i}" onclick="submitAnswer(${i})">${o}</button>`).join('')}
     </div>`;
@@ -1895,12 +1969,9 @@ function renderQuestion() {
     orderAvailable = shuffle(q.parts.map((_,i) => i));
     optionsHTML = `
       <div class="order-section-label">排列順序</div>
-      <div class="order-placed" id="orderPlaced">
-        <span class="order-placed-hint">點下方的語句，依序排列</span>
-      </div>
+      <div class="order-placed" id="orderPlaced"><span class="order-placed-hint">點下方的語句，依序排列</span></div>
       <div class="order-section-label" style="margin-top:14px">語句</div>
-      <div class="order-available" id="orderAvailable"></div>
-    `;
+      <div class="order-available" id="orderAvailable"></div>`;
   }
 
   document.getElementById('quizBody').innerHTML = `
@@ -1924,8 +1995,6 @@ function renderQuestion() {
       </button>
     </div>
   `;
-
-  // For order questions: render the interactive word chips after innerHTML is set
   if (q.type === 'order') renderOrderUI(q);
 }
 
@@ -1935,7 +2004,6 @@ function submitAnswer(selectedIdx) {
   const correct = selectedIdx === q.answer;
   answered = true;
   recordResult(q, correct);
-
   const area = document.getElementById('optionArea');
   const btns = area.querySelectorAll('button');
   btns.forEach(b => {
@@ -1944,8 +2012,6 @@ function submitAnswer(selectedIdx) {
     if (idx === q.answer) b.classList.add('correct');
     else if (idx === selectedIdx && !correct) b.classList.add('wrong');
   });
-
-  // Fill: update blank display
   if (q.type === 'fill') {
     const blank = document.getElementById('blankSpan');
     if (blank) {
@@ -1955,7 +2021,6 @@ function submitAnswer(selectedIdx) {
       blank.style.background = correct ? 'var(--green-bg)' : 'var(--red-bg)';
     }
   }
-
   showFeedback(correct, q.explanation);
 }
 
@@ -1965,7 +2030,6 @@ function submitTF(selected) {
   const correct = selected === q.answer;
   answered = true;
   recordResult(q, correct);
-
   const btns = document.querySelectorAll('.tf-btn');
   btns.forEach(b => {
     b.classList.add('locked');
@@ -1973,29 +2037,23 @@ function submitTF(selected) {
     if (val === q.answer) b.classList.add('correct');
     else if (val === selected && !correct) b.classList.add('wrong');
   });
-
   showFeedback(correct, q.explanation);
 }
 
-// ── ORDER QUESTION INTERACTIONS ───────────────────────
 function renderOrderUI(q) {
   const placedEl = document.getElementById('orderPlaced');
   const availEl = document.getElementById('orderAvailable');
   if (!placedEl || !availEl) return;
-
   if (orderPlaced.length === 0) {
     placedEl.innerHTML = '<span class="order-placed-hint">點下方的語句，依序排列</span>';
     placedEl.classList.remove('has-words');
   } else {
     placedEl.classList.add('has-words');
     placedEl.innerHTML = orderPlaced.map((idx, pos) =>
-      `<button class="order-word placed" onclick="removePlaced(${pos})">${q.parts[idx]}</button>`
-    ).join('');
+      `<button class="order-word placed" onclick="removePlaced(${pos})">${q.parts[idx]}</button>`).join('');
   }
-
   availEl.innerHTML = orderAvailable.map(idx =>
-    `<button class="order-word avail" onclick="placeWord(${idx})">${q.parts[idx]}</button>`
-  ).join('');
+    `<button class="order-word avail" onclick="placeWord(${idx})">${q.parts[idx]}</button>`).join('');
 }
 
 function placeWord(idx) {
@@ -2020,8 +2078,6 @@ function checkOrder(q) {
   answered = true;
   const correct = JSON.stringify(orderPlaced) === JSON.stringify(q.answer_order);
   recordResult(q, correct);
-
-  // Freeze and colour placed words
   const placedEl = document.getElementById('orderPlaced');
   if (placedEl) {
     placedEl.classList.add('has-words');
@@ -2031,59 +2087,49 @@ function checkOrder(q) {
     }).join('');
   }
   document.querySelectorAll('.order-word.avail').forEach(b => b.classList.add('locked'));
-
   const extra = correct ? '' : `\n正確順序：${q.correct_sentence}`;
   showFeedback(correct, (q.explanation || '') + extra);
 }
 
 function showFeedback(correct, explanation) {
   const card = document.getElementById('feedbackCard');
-  const icon = document.getElementById('fbIcon');
-  const result = document.getElementById('fbResult');
-  const explain = document.getElementById('fbExplain');
-
   card.classList.add('show');
   card.classList.add(correct ? 'correct-fb' : 'wrong-fb');
-  icon.textContent = correct ? '✅' : '❌';
-  result.textContent = correct ? '正確！' : '答錯了';
-  result.className = 'feedback-result ' + (correct ? 'ok' : 'ng');
-  explain.textContent = explanation || '';
-
-  // Scroll to feedback
+  document.getElementById('fbIcon').textContent = correct ? '✓' : '✗';
+  const res = document.getElementById('fbResult');
+  res.textContent = correct ? '正確！' : '答錯了';
+  res.className = 'feedback-result ' + (correct ? 'ok' : 'ng');
+  document.getElementById('fbExplain').textContent = explanation || '';
   setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
 }
 
 function nextQuestion() {
   currentIdx++;
-  if (currentIdx >= deck.length) {
-    showComplete();
-  } else {
-    renderQuestion();
-    window.scrollTo(0,0);
-  }
+  if (currentIdx >= deck.length) showComplete();
+  else { renderQuestion(); window.scrollTo(0,0); }
 }
 
 function recordResult(q, correct) {
   score.total++;
   if (correct) score.correct++;
-  typeScore[q.type].total++;
-  if (correct) typeScore[q.type].correct++;
-
+  if (typeScore[q.type]) {
+    typeScore[q.type].t++;
+    if (correct) typeScore[q.type].c++;
+  }
   todayStats.total++;
   if (correct) todayStats.correct++;
   localStorage.setItem('jq_today', JSON.stringify(todayStats));
   updateStreakIfNeeded();
-
-  // Track per-session results
   sessionResults.push({ q, correct });
-
-  // Auto-star wrong answers
   if (!correct && !starred.has(q.id)) {
     starred.add(q.id);
     localStorage.setItem('jq_starred', JSON.stringify([...starred]));
     const btn = document.getElementById('quizStar');
-    if (btn) btn.textContent = '★';
-    showToast('答錯自動收藏 ★');
+    if (btn) {
+      btn.className = 'quiz-star starred';
+      btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    }
+    showToast('答錯自動收藏');
   }
 }
 
@@ -2091,43 +2137,37 @@ function updateStreakIfNeeded() {
   const lastDay = localStorage.getItem('jq_lastDay');
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
   if (lastDay === yesterday || !lastDay) {
-    if (lastDay !== today) {
-      streak++;
-      localStorage.setItem('jq_streak', streak);
-      localStorage.setItem('jq_lastDay', today);
-    }
+    if (lastDay !== today) { streak++; localStorage.setItem('jq_streak', streak); localStorage.setItem('jq_lastDay', today); }
   } else if (lastDay !== today) {
-    streak = 1;
-    localStorage.setItem('jq_streak', streak);
-    localStorage.setItem('jq_lastDay', today);
+    streak = 1; localStorage.setItem('jq_streak', streak); localStorage.setItem('jq_lastDay', today);
   }
 }
 
 // ═══════════════════════════════════════════
 // COMPLETE SCREEN
 // ═══════════════════════════════════════════
+function getCompleteIcon(pct) {
+  if (pct >= 90) return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`;
+  if (pct >= 70) return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+  if (pct >= 50) return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
+}
+
 function showComplete() {
   document.getElementById('progressFill').style.width = '100%';
   const pct = Math.round(score.correct / score.total * 100);
-  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '💪' : '📖';
-
-  document.getElementById('completeEmoji').textContent = emoji;
+  document.getElementById('completeEmoji').innerHTML = getCompleteIcon(pct);
   document.getElementById('completeCorrect').textContent = score.correct;
   document.getElementById('completeDenom').textContent = `/ ${score.total}`;
   document.getElementById('completePct').textContent = `正確率 ${pct}%`;
-
-  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
+  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序', counter:'量詞' };
   const bd = document.getElementById('completeBreakdown');
   bd.innerHTML = Object.entries(typeScore)
-    .filter(([,v]) => v.total > 0)
+    .filter(([,v]) => v.t > 0)
     .map(([k,v]) => {
-      const p = Math.round(v.correct/v.total*100);
-      return `<div class="cb-row">
-        <span class="cb-label">${typeNames[k]}</span>
-        <span class="cb-score ${p===100?'perfect':''}">${v.correct}/${v.total} (${p}%)</span>
-      </div>`;
+      const p = Math.round(v.c/v.t*100);
+      return `<div class="cb-row"><span class="cb-label">${typeNames[k]||k}</span><span class="cb-score ${p===100?'perfect':''}">${v.c}/${v.t} (${p}%)</span></div>`;
     }).join('');
-
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-complete').classList.add('active');
   document.getElementById('bottomNav').style.display = 'flex';
@@ -2135,14 +2175,20 @@ function showComplete() {
   window.scrollTo(0,0);
 }
 
+// ═══════════════════════════════════════════
+// LEAVE MODAL
+// ═══════════════════════════════════════════
 function confirmLeave() {
-  if (!answered && score.total === 0) {
-    switchPage('home');
-    return;
-  }
-  if (confirm('確定要離開練習嗎？（進度不會儲存）')) {
-    switchPage('home');
-  }
+  if (score.total === 0) { switchPage('home'); return; }
+  document.getElementById('leaveModal').classList.add('show');
+}
+function closeLeaveModal(e) {
+  if (e && e.target !== document.getElementById('leaveModal')) return;
+  document.getElementById('leaveModal').classList.remove('show');
+}
+function leaveQuiz() {
+  document.getElementById('leaveModal').classList.remove('show');
+  switchPage('home');
 }
 
 // ═══════════════════════════════════════════
@@ -2151,14 +2197,17 @@ function confirmLeave() {
 function toggleStar() {
   if (!deck.length) return;
   const q = deck[currentIdx];
+  const btn = document.getElementById('quizStar');
   if (starred.has(q.id)) {
     starred.delete(q.id);
-    document.getElementById('quizStar').textContent = '☆';
+    btn.className = 'quiz-star';
+    btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
     showToast('已取消收藏');
   } else {
     starred.add(q.id);
-    document.getElementById('quizStar').textContent = '★';
-    showToast('已收藏 ★');
+    btn.className = 'quiz-star starred';
+    btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    showToast('已收藏');
   }
   localStorage.setItem('jq_starred', JSON.stringify([...starred]));
 }
@@ -2168,14 +2217,11 @@ function renderFavorites() {
   document.getElementById('favSubtitle').textContent = `${starredList.length} 題`;
   const body = document.getElementById('favBody');
   if (!starredList.length) {
-    body.innerHTML = `<div class="fav-empty">
-      <div class="fav-empty-icon">☆</div>
-      <div class="fav-empty-text">還沒有收藏的題目<br>答錯的題目會自動收藏進來</div>
-    </div>`;
+    body.innerHTML = `<div class="fav-empty"><div class="fav-empty-icon">☆</div><div class="fav-empty-text">還沒有收藏的題目<br>答錯的題目會自動收藏進來</div></div>`;
     return;
   }
-  const typeLabel = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
-  const typeBadgeCls = { fill:'badge-fill', choice:'badge-choice', tf:'badge-tf', conjugation:'badge-conj', order:'badge-order' };
+  const typeLabel = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序', counter:'量詞' };
+  const typeBadgeCls = { fill:'badge-fill', choice:'badge-choice', tf:'badge-tf', conjugation:'badge-conj', order:'badge-order', counter:'badge-counter' };
   body.innerHTML = starredList.map(q => {
     let ans = '';
     if (q.type === 'tf') ans = q.answer ? '○ 正確' : '× 錯誤';
@@ -2183,6 +2229,7 @@ function renderFavorites() {
     else if (q.options) ans = q.options[q.answer];
     const extra = q.type === 'fill' ? `<br><small style="color:var(--muted)">${q.sentence}</small>`
                 : q.type === 'conjugation' ? `<br><small style="color:var(--muted)">${q.verb} → ${q.conjugation_type}</small>`
+                : q.type === 'counter' ? `<br><small style="color:var(--muted)">${q.display}</small>`
                 : '';
     return `<div class="fav-item">
       <div class="fav-item-top">
@@ -2206,37 +2253,83 @@ function unstar(id) {
 }
 
 // ═══════════════════════════════════════════
-// SUGGEST
+// SUGGEST MODAL
 // ═══════════════════════════════════════════
-function openSuggest() {
-  document.getElementById('suggestModal').classList.add('show');
-  setTimeout(() => document.getElementById('suggestText').focus(), 200);
-}
+function openSuggest() { document.getElementById('suggestModal').classList.add('show'); }
 function closeSuggest(e) {
   if (e && e.target !== document.getElementById('suggestModal')) return;
   document.getElementById('suggestModal').classList.remove('show');
 }
 function submitSuggest() {
-  const text = document.getElementById('suggestText').value.trim();
-  if (!text) return;
-  suggests.push({ text, date: new Date().toISOString() });
+  const txt = document.getElementById('suggestText').value.trim();
+  if (!txt) return;
+  suggests.push({ text: txt, date: today });
   localStorage.setItem('jq_suggests', JSON.stringify(suggests));
   document.getElementById('suggestText').value = '';
-  document.getElementById('suggestModal').classList.remove('show');
-  showToast('✅ 建議已儲存');
+  closeSuggest();
+  showToast('已儲存建議');
 }
 
 // ═══════════════════════════════════════════
-// UTILS
+// EXPORT
 // ═══════════════════════════════════════════
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+function generateNotionExport() {
+  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序', counter:'量詞' };
+  const pct = score.total > 0 ? Math.round(score.correct / score.total * 100) : 0;
+  const dateLabel = new Date().toLocaleDateString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit'});
+  let md = `# 日文練習紀錄 ${dateLabel}\n\n`;
+  md += `**練習成果：** ${score.correct}/${score.total} 題（正確率 ${pct}%）\n\n`;
+  const breakdown = Object.entries(typeScore).filter(([,v]) => v.t > 0);
+  if (breakdown.length > 0) {
+    md += `## 各題型\n`;
+    breakdown.forEach(([k,v]) => {
+      const p = Math.round(v.c/v.t*100);
+      md += `- ${typeNames[k]||k}：${v.c}/${v.t}（${p}%）\n`;
+    });
+    md += '\n';
   }
-  return arr;
+  const wrong = sessionResults.filter(r => !r.correct);
+  if (wrong.length > 0) {
+    md += `## 答錯的題目（${wrong.length} 題）\n`;
+    wrong.forEach((r, i) => {
+      const q = r.q;
+      let ans = '';
+      if (q.type === 'tf') ans = q.answer ? '○' : '×';
+      else if (q.type === 'order') ans = q.correct_sentence;
+      else if (q.options) ans = q.options[q.answer];
+      md += `${i+1}. ${q.question} → **${ans}**\n`;
+      if (q.explanation) md += `   > ${q.explanation}\n`;
+    });
+    md += '\n';
+  }
+  const correct = sessionResults.filter(r => r.correct);
+  if (correct.length > 0) {
+    md += `## 答對的題目（${correct.length} 題）\n`;
+    correct.forEach((r, i) => { md += `${i+1}. ${r.q.question} *(${r.q.source})*\n`; });
+  }
+  return md;
 }
 
+function openExport() {
+  document.getElementById('exportText').value = generateNotionExport();
+  document.getElementById('exportModal').classList.add('show');
+}
+function closeExport(e) {
+  if (e && e.target !== document.getElementById('exportModal')) return;
+  document.getElementById('exportModal').classList.remove('show');
+}
+function copyExport() {
+  const ta = document.getElementById('exportText');
+  ta.select(); ta.setSelectionRange(0, 99999);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(ta.value).then(() => { showToast('已複製到剪貼簿'); closeExport(); })
+      .catch(() => { document.execCommand('copy'); showToast('已複製到剪貼簿'); closeExport(); });
+  } else { document.execCommand('copy'); showToast('已複製到剪貼簿'); closeExport(); }
+}
+
+// ═══════════════════════════════════════════
+// TOAST & UTILS
+// ═══════════════════════════════════════════
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -2245,100 +2338,18 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
 }
-
-// ═══════════════════════════════════════════
-// NOTION EXPORT
-// ═══════════════════════════════════════════
-function generateNotionExport() {
-  const typeNames = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序' };
-  const pct = score.total > 0 ? Math.round(score.correct / score.total * 100) : 0;
-  const dateLabel = new Date().toLocaleDateString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit'});
-
-  let md = `# 日文練習紀錄 ${dateLabel}\n\n`;
-  md += `**練習成果：** ${score.correct}/${score.total} 題（正確率 ${pct}%）\n\n`;
-
-  // Type breakdown
-  md += `## 題型分析\n`;
-  Object.entries(typeScore).filter(([,v]) => v.total > 0).forEach(([k, v]) => {
-    const p = Math.round(v.correct / v.total * 100);
-    const flag = p < 100 ? ' ⚠️' : ' ✅';
-    md += `- **${typeNames[k]}**：${v.correct}/${v.total}${flag}\n`;
-  });
-  md += '\n---\n\n';
-
-  // Wrong answers
-  const wrong = sessionResults.filter(r => !r.correct);
-  if (wrong.length === 0) {
-    md += `## 🏆 全部答對！太厲害了！\n`;
-  } else {
-    md += `## ❌ 需要複習的題目（${wrong.length} 題）\n\n`;
-    wrong.forEach((r, i) => {
-      const q = r.q;
-      md += `### ${i + 1}. ${q.question}\n`;
-      if (q.type === 'tf') {
-        md += `> **正確答案：** ${q.answer ? '○ 正確' : '× 錯誤'}\n`;
-      } else if (q.type === 'order') {
-        md += `> **正確順序：** ${q.correct_sentence}\n`;
-      } else if (q.options) {
-        md += `> **正確答案：** ${q.options[q.answer]}\n`;
-      }
-      if (q.explanation) md += `\n${q.explanation}\n`;
-      md += `\n*來源：${q.source}*\n\n`;
-    });
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-
-  // Correct answers summary
-  const correct = sessionResults.filter(r => r.correct);
-  if (correct.length > 0) {
-    md += `---\n\n## ✅ 答對的題目（${correct.length} 題）\n`;
-    correct.forEach((r, i) => {
-      md += `${i + 1}. ${r.q.question} *(${r.q.source})*\n`;
-    });
-  }
-
-  return md;
-}
-
-function openExport() {
-  const md = generateNotionExport();
-  document.getElementById('exportText').value = md;
-  document.getElementById('exportModal').classList.add('show');
-}
-
-function closeExport(e) {
-  if (e && e.target !== document.getElementById('exportModal')) return;
-  document.getElementById('exportModal').classList.remove('show');
-}
-
-function copyExport() {
-  const ta = document.getElementById('exportText');
-  ta.select();
-  ta.setSelectionRange(0, 99999);
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(ta.value).then(() => {
-      showToast('✅ 已複製到剪貼簿');
-      closeExport();
-    }).catch(() => {
-      document.execCommand('copy');
-      showToast('✅ 已複製到剪貼簿');
-      closeExport();
-    });
-  } else {
-    document.execCommand('copy');
-    showToast('✅ 已複製到剪貼簿');
-    closeExport();
-  }
+  return a;
 }
 
 // ═══════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════
 init();
-
-// PWA service worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
 </script>
 </body>
 </html>
