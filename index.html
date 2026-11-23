@@ -42,12 +42,12 @@ body{height:100dvh;overflow:hidden;background:var(--bg)}
 .home-header{background:radial-gradient(ellipse 120% 160% at 50% -20%, rgba(160,100,40,.45) 0%, transparent 65%), var(--bg);padding:calc(env(safe-area-inset-top,0px) + 32px) 20px 20px;flex-shrink:0}
 .home-title{font-size:17px;font-weight:500;font-family:'Shippori Mincho',serif;line-height:1.2;color:var(--text);text-align:center}
 .home-title span{color:var(--text)}
-.home-body{padding:12px 16px;flex:1;display:flex;flex-direction:column;overflow:hidden}
-.stats-row{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0}
-.stat-card{flex:1;background:var(--card-bg);border-radius:14px;padding:10px 12px;border:1px solid var(--gray2)}
-.stat-num{font-size:22px;font-weight:700;line-height:1}
+.home-body{padding:12px 16px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px);flex:1;display:flex;flex-direction:column;overflow:hidden}
+.stats-row{display:flex;gap:8px;margin-bottom:14px;flex-shrink:0}
+.stat-card{flex:1;background:var(--card-bg);border-radius:16px;padding:16px 12px;border:1px solid var(--gray2);display:flex;flex-direction:column;align-items:center;gap:4px}
+.stat-num{font-size:30px;font-weight:700;line-height:1}
 .stat-num.orange{color:var(--orange)}.stat-num.green{color:var(--green)}
-.stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px}
 .section-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
 
 /* COUNT CHIPS */
@@ -61,9 +61,16 @@ body{height:100dvh;overflow:hidden;background:var(--bg)}
 .meta-info{font-size:11px;color:var(--muted)}
 
 /* TYPE BREAKDOWN CARDS */
-.type-breakdown{margin-top:10px;display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden}
-.type-card{display:flex;align-items:center;gap:10px;border-radius:12px;padding:9px 14px;border:1px solid var(--gray2);flex-shrink:0}
+.type-breakdown{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6px;flex:1;overflow:hidden}
+.type-card{display:flex;align-items:center;gap:8px;border-radius:12px;padding:10px 12px;border:1px solid var(--gray2);cursor:pointer;transition:opacity .15s,border-color .15s,background .15s;user-select:none;min-height:0}
 .type-card-fill,.type-card-choice,.type-card-tf,.type-card-conj,.type-card-order,.type-card-counter{background:var(--card-bg)}
+.type-card.off{opacity:.35}
+.type-card.sel.type-card-fill{border-color:var(--orange);background:var(--orange-bg)}
+.type-card.sel.type-card-choice{border-color:var(--blue);background:var(--blue-bg)}
+.type-card.sel.type-card-tf{border-color:var(--green);background:var(--green-bg)}
+.type-card.sel.type-card-conj{border-color:var(--purple);background:var(--purple-bg)}
+.type-card.sel.type-card-order{border-color:var(--cyan);background:var(--cyan-bg)}
+.type-card.sel.type-card-counter{border-color:var(--amber);background:var(--amber-bg)}
 .type-icon-wrap{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .fill-icon{background:rgba(255,154,92,.18);color:var(--orange)}
 .choice-icon{background:rgba(129,140,248,.18);color:var(--blue)}
@@ -278,40 +285,39 @@ rt{font-size:.55em;color:var(--muted);letter-spacing:0}
       <button class="count-chip" data-count="0" onclick="setCount(0)">全部</button>
     </div>
 
-    <button class="start-btn" id="startBtn" onclick="startQuiz()">開始練習</button>
-
     <div class="type-breakdown" id="typeBreakdown">
-      <div class="type-card type-card-fill">
+      <div class="type-card type-card-fill sel" data-type="fill" onclick="toggleType('fill')">
         <div class="type-icon-wrap fill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
         <div class="type-info"><div class="type-name-main">填空</div><div class="type-name-sub">助詞・文法挖空</div></div>
         <div class="type-count-num" id="countFill">—</div>
       </div>
-      <div class="type-card type-card-choice">
+      <div class="type-card type-card-choice sel" data-type="choice" onclick="toggleType('choice')">
         <div class="type-icon-wrap choice-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
         <div class="type-info"><div class="type-name-main">選擇</div><div class="type-name-sub">讀音・用法</div></div>
         <div class="type-count-num" id="countChoice">—</div>
       </div>
-      <div class="type-card type-card-tf">
+      <div class="type-card type-card-tf sel" data-type="tf" onclick="toggleType('tf')">
         <div class="type-icon-wrap tf-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
         <div class="type-info"><div class="type-name-main">是非</div><div class="type-name-sub">正誤判斷</div></div>
         <div class="type-count-num" id="countTF">—</div>
       </div>
-      <div class="type-card type-card-conj">
+      <div class="type-card type-card-conj sel" data-type="conjugation" onclick="toggleType('conjugation')">
         <div class="type-icon-wrap conj-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
         <div class="type-info"><div class="type-name-main">動詞変化</div><div class="type-name-sub">て形・ない形・た形 等</div></div>
         <div class="type-count-num" id="countConj">—</div>
       </div>
-      <div class="type-card type-card-order">
+      <div class="type-card type-card-order sel" data-type="order" onclick="toggleType('order')">
         <div class="type-icon-wrap order-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="8" y2="18"/></svg></div>
         <div class="type-info"><div class="type-name-main">排序</div><div class="type-name-sub">語句排列</div></div>
         <div class="type-count-num" id="countOrder">—</div>
       </div>
-      <div class="type-card type-card-counter">
+      <div class="type-card type-card-counter sel" data-type="counter" onclick="toggleType('counter')">
         <div class="type-icon-wrap counter-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div>
         <div class="type-info"><div class="type-name-main">量詞</div><div class="type-name-sub">助数詞の読み方</div></div>
         <div class="type-count-num" id="countCounter">—</div>
       </div>
     </div>
+    <button class="start-btn" id="startBtn" onclick="startQuiz()" style="margin-top:12px">開始練習</button>
     <div class="meta-row">
       <div class="meta-info" id="metaInfo">載入中…</div>
       <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">建議功能</button>
@@ -431,8 +437,8 @@ rt{font-size:.55em;color:var(--muted);letter-spacing:0}
 window.QUIZ_DATA = {
   meta: {
     generated_at: "2026-11-23",
-    sources: ["SHUHARI JAPANESE 2026-11-20", "SHUHARI JAPANESE 2026-11-06", "兩個傻瓜 2026-10-09", "兩個傻瓜 2026-08-10"],
-    total: 138
+    sources: ["SHUHARI JAPANESE 2026-11-20", "SHUHARI JAPANESE 2026-11-06", "兩個傻瓜 2026-10-09", "兩個傻瓜 2026-08-10", "日文三大句型結構", "い/な形容詞", "比較文型", "います/あります"],
+    total: 214
   },
   questions: [
     // ── VOCABULARY READINGS ──────────────────────────────
@@ -1812,6 +1818,506 @@ window.QUIZ_DATA = {
     {id:"v059",type:"conjugation",verb:"住む",conjugation_type:"て形＋いる",source:"動詞変化",question:"「住む」のて形＋いる（居住状態）はどれですか？",options:["すみています","すんでいます","すんでます","すみます"],answer:1,explanation:"住む → 住んでいます：む→んで（て形）＋います。表示持續居住的狀態。"},
     {id:"v060",type:"conjugation",verb:"知る",conjugation_type:"て形＋いる",source:"動詞変化",question:"「知る」のて形＋いる（知っている状態）はどれですか？",options:["しっています","しています","しりています","しんでいます"],answer:0,explanation:"知る → 知っています：五段動詞（る→って）＋います。表示知道某事的狀態。"},
     {id:"v061",type:"conjugation",verb:"来る（くる）",conjugation_type:"て形＋いる",source:"動詞変化",question:"「来る」のて形＋いる（現在の移動）はどれですか？",options:["くています","きています","こいています","くるています"],answer:1,explanation:"来る（くる）→ 来て（きて）＋います＝来ています（きています）：不規則動詞。"},
+
+    // ── 新増：三大句型・形容詞・比較・助詞 ──────────────────────
+    // FILL-IN
+    {
+      id: "q054", type: "fill", category: "grammar", source: "日文三大句型",
+      question: "「私は日本＿＿＿＿行きます。」→ 目的地の助詞を選んでください",
+      options: ["は", "に", "が", "で"],
+      answer: 1,
+      explanation: "「に」は移動（いどう）の目的地（もくてきち）を表す。「日本（にほん）に行く（いく）」＝去日本。「は」は主題、「が」は主語、「で」は場所での動作。"
+    },
+    {
+      id: "q055", type: "fill", category: "grammar", source: "日文三大句型",
+      question: "「にほんごが わかり＿＿＿か？」→ 丁寧な疑問形の語尾は？",
+      options: ["ます", "ません", "ました", "まし"],
+      answer: 0,
+      explanation: "「わかりますか？」：分かる（わかる）のます形＋疑問「か」。「您懂日文嗎？」。ます形は丁寧体（ていねいたい）。"
+    },
+    {
+      id: "q056", type: "fill", category: "grammar", source: "日文三大句型",
+      question: "「いいえ、わかり＿＿＿。」→ 否定の答えとして正しい語尾は？",
+      options: ["ます", "ません", "ました", "ませんでした"],
+      answer: 1,
+      explanation: "「わかりません」：ます形の否定形は「ます → ません」。「不懂」的日文標準說法。"
+    },
+    {
+      id: "q057", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「大きい」の否定形：「大き＿＿＿＿です」",
+      options: ["くない", "ではない", "じゃない", "くありません"],
+      answer: 0,
+      explanation: "い形容詞（い形容詞）の否定形：語尾「い」を「くない」に変える。大きい（おおきい）→ 大きくない（おおきくない）です。口語では「くないです」が自然。"
+    },
+    {
+      id: "q058", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「いい」の否定形：「＿＿＿くないです」→ 正しい変化形は？",
+      options: ["い", "よ", "わる", "い（そのまま）"],
+      answer: 1,
+      explanation: "「いい」は特殊：否定形は「よくないです」（よ＋くない）。「いくないです」は間違い。「よい（良い）」から変化させる。"
+    },
+    {
+      id: "q059", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「台北はあまり静か＿＿＿ありません。」→ な形容詞の否定形は？",
+      options: ["は", "が", "では", "にも"],
+      answer: 2,
+      explanation: "な形容詞（な形容詞）の否定形：「静か（しずか）ではありません」。な形容詞は「では（じゃ）ありません」で否定。い形容詞の「くないです」との違いに注意。"
+    },
+    {
+      id: "q060", type: "fill", category: "grammar", source: "比較",
+      question: "「日本語は英語＿＿＿＿難しいです。」→ 比較の助詞は？",
+      options: ["に", "が", "より", "から"],
+      answer: 2,
+      explanation: "「より」は比較（ひかく）の助詞。「AはBより〜」＝「A比B更〜」。日本語（にほんご）は英語（えいご）より難しい（むずかしい）です。"
+    },
+    {
+      id: "q061", type: "fill", category: "grammar", source: "比較",
+      question: "「コーヒーのほうが好きです」の「＿＿＿＿が」→ 比較の「どちら」に当たる語は？",
+      options: ["ほう", "より", "方向", "かた"],
+      answer: 0,
+      explanation: "「のほうが」：比較後に「其中更～的那個」を表す。「コーヒーのほうが好きです」＝比較喜歡咖啡。「ほう（方）」は偏向・方向を表す。"
+    },
+    {
+      id: "q062", type: "fill", category: "grammar", source: "比較",
+      question: "「日本料理の中で何＿＿＿一番美味しいですか。」→ 助詞は？",
+      options: ["は", "が", "を", "に"],
+      answer: 1,
+      explanation: "疑問詞（ぎもんし）＋「が」：「何が（なにが）一番（いちばん）」。「日本料理（にほんりょうり）の中（なか）で何が一番美味しいですか」＝在日本料理裡什麼最好吃？"
+    },
+    {
+      id: "q063", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「私は猫＿＿＿好きです。」→ 好き・嫌いに使う助詞は？",
+      options: ["は", "が", "を", "の"],
+      answer: 1,
+      explanation: "好き（すき）・嫌い（きらい）・上手（じょうず）・下手（へた）・分かる（わかる）などは「が」を使う。「私（わたし）は猫（ねこ）が好きです」＝我喜歡貓。"
+    },
+    {
+      id: "q064", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「私は料理＿＿＿下手です。」→ 能力・好みの助詞は？",
+      options: ["は", "が", "を", "の"],
+      answer: 1,
+      explanation: "「が下手（へた）」：能力・好みには「が」を使う。「私（わたし）は料理（りょうり）が下手（へた）です」＝我不擅長做菜。好き・嫌い・上手・下手・分かるは全部「が」。"
+    },
+    {
+      id: "q065", type: "fill", category: "grammar", source: "います/あります",
+      question: "「公園に子供＿＿＿います。」→ 存在する主語の前の助詞は？",
+      options: ["は", "が", "を", "に"],
+      answer: 1,
+      explanation: "存在文（そんざいぶん）：「場所（ばしょ）に〜が います／あります」。「公園（こうえん）に子供（こども）が います」＝公園裡有小孩子。存在する主語の前は「が」。"
+    },
+    {
+      id: "q066", type: "fill", category: "grammar", source: "います/あります",
+      question: "「コンビニは駅の前＿＿＿あります。」→ 存在位置の助詞は？",
+      options: ["で", "が", "に", "を"],
+      answer: 2,
+      explanation: "「場所（ばしょ）にあります」：存在（そんざい）を示す「に」。「コンビニは駅（えき）の前（まえ）にあります」＝便利商店在車站前面。「で」は動作の場所。"
+    },
+    {
+      id: "q067", type: "fill", category: "grammar", source: "います/あります",
+      question: "「冷蔵庫に牛乳と卵＿＿＿あります。」→ 助詞は？",
+      options: ["は", "が", "を", "に"],
+      answer: 1,
+      explanation: "「冷蔵庫（れいぞうこ）に牛乳（ぎゅうにゅう）と卵（たまご）があります」＝冰箱裡有牛奶和雞蛋。「が」は存在する物を指す主語助詞。"
+    },
+    {
+      id: "q068", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「コーヒーは高いです＿＿＿、あまり飲みません。」→ 原因・理由を表す接続は？",
+      options: ["が", "から", "ので", "けど"],
+      answer: 1,
+      explanation: "「〜から」：原因・理由（りゆう）。「高い（たかい）ですから、あまり飲（の）みません」＝因為很貴，所以不太喝。「が」は逆接（但是）なので間違い。"
+    },
+    {
+      id: "q069", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「ケーキは美味しいです＿＿＿、小さいです。」→ 逆接（但是）を表す接続は？",
+      options: ["から", "が", "そして", "ので"],
+      answer: 1,
+      explanation: "「〜が」：逆接（ぎゃくせつ）・「但是」。「美味しい（おいしい）ですが、小さい（ちいさい）です」＝雖然好吃，但是很小。「から」は理由、「そして」は順接（而且）。"
+    },
+    {
+      id: "q070", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「北海道は＿＿＿寒いです。」→ 程度副詞（很/非常）は？",
+      options: ["あまり", "とても", "全然", "もっと"],
+      answer: 1,
+      explanation: "「とても」：肯定形（こうていけい）と一緒に使う程度副詞（ていどふくし）。「とても寒い（さむい）」＝很冷。「あまり」は否定形（あまり〜ない）と使う。"
+    },
+    {
+      id: "q071", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「台北は＿＿＿静かではありません。」→ 程度副詞（不太）は？",
+      options: ["とても", "あまり", "全然", "もっと"],
+      answer: 1,
+      explanation: "「あまり」：否定形（ひていけい）と一緒に使う。「あまり〜ではありません」＝不太〜。「台北（たいぺい）はあまり静か（しずか）ではありません」＝台北不太安靜。"
+    },
+    {
+      id: "q072", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「机の上に本＿＿＿三冊あります。」→ 助詞は？",
+      options: ["は", "が", "を", "に"],
+      answer: 1,
+      explanation: "数量表現（すうりょうひょうげん）：「名詞＋が＋数量＋あります」。「机（つくえ）の上（うえ）に本（ほん）が三冊（さんさつ）あります」＝桌上有三本書。"
+    },
+    {
+      id: "q073", type: "fill", category: "grammar", source: "い/な形容詞",
+      question: "「先生はハンサムです。＿＿＿優しいです。」→ 順接（而且）の接続詞は？",
+      options: ["が", "でも", "そして", "から"],
+      answer: 2,
+      explanation: "「そして」：順接（じゅんせつ）・「而且、然後」。「先生（せんせい）はハンサムです。そして優しい（やさしい）です」＝老師很帥，而且很溫柔。逆接は「が／でも」。"
+    },
+
+    // CHOICE
+    {
+      id: "q074", type: "choice", category: "grammar", source: "い/な形容詞",
+      question: "「いい」の否定形として正しいものはどれですか？",
+      options: ["いくないです", "よくないです", "いじゃないです", "いではありません"],
+      answer: 1,
+      explanation: "「いい」→否定形は「よくないです」。「い」から変化させず、「よい（良い）」から「よくない」に変化させる。「いくないです」は間違い。"
+    },
+    {
+      id: "q075", type: "choice", category: "grammar", source: "い/な形容詞",
+      question: "「日本の生活は___ですか。」→ 感想・状態を聞くのに正しい疑問詞は？",
+      options: ["どんな", "どう", "どれ", "どこ"],
+      answer: 1,
+      explanation: "「どう」：状態（じょうたい）・感想（かんそう）を聞く。「日本（にほん）の生活（せいかつ）はどうですか」＝日本的生活如何？。「どんな」は後ろに名詞が続く（どんな町？）。"
+    },
+    {
+      id: "q076", type: "choice", category: "grammar", source: "い/な形容詞",
+      question: "「奈良はどんな＿＿＿ですか。—古い＿＿＿です。」→ 空欄に入るのは？",
+      options: ["どこ", "何", "町", "人"],
+      answer: 2,
+      explanation: "「どんな＋名詞（めいし）」：性質・種類を聞く。「奈良（なら）はどんな町（まち）ですか。古い（ふるい）町です」＝奈良是什麼樣的城市？是個古老的城市。"
+    },
+    {
+      id: "q077", type: "choice", category: "grammar", source: "比較",
+      question: "「一年で＿＿＿が一番暑いですか。」→ 時間を聞く疑問詞は？",
+      options: ["何", "いつ", "どこ", "どれ"],
+      answer: 1,
+      explanation: "「いつ」：時間（じかん）・時期（じき）を聞く疑問詞。「一年（いちねん）でいつが一番（いちばん）暑い（あつい）ですか」＝一年裡什麼時候最熱？「何（なに）」は物を聞く。"
+    },
+    {
+      id: "q078", type: "choice", category: "grammar", source: "います/あります",
+      question: "「台北101は台北に___。」→ 建物の存在を表す動詞は？",
+      options: ["います", "あります", "どちらも正しい", "どちらも間違い"],
+      answer: 1,
+      explanation: "建物（たてもの）・場所（ばしょ）・物（もの）：「あります」。生き物（いきもの）：「います」。台北101は建物なので「あります」。"
+    },
+    {
+      id: "q079", type: "choice", category: "grammar", source: "います/あります",
+      question: "「教室に先生と学生___。」→ 人の存在を表す動詞は？",
+      options: ["あります", "います", "いあります", "どちらも正しい"],
+      answer: 1,
+      explanation: "人（ひと）・動物（どうぶつ）などの生き物（いきもの）：「います」。「教室（きょうしつ）に先生（せんせい）と学生（がくせい）がいます」＝教室裡有老師和學生。"
+    },
+    {
+      id: "q080", type: "choice", category: "grammar", source: "い/な形容詞",
+      question: "「あまり___ないです。」→ 文法的に正しいのは？",
+      options: ["あまり美味しいです", "あまり美味しく", "あまり静かではありません", "あまり好きです"],
+      answer: 2,
+      explanation: "「あまり」：必ず否定形（ひていけい）と一緒に使う。「あまり静か（しずか）ではありません」＝不太安靜。肯定形と使うと間違い。「とても」が肯定形と使う副詞。"
+    },
+    {
+      id: "q081", type: "choice", category: "grammar", source: "日文三大句型",
+      question: "「はい、そうです。」はどんな場面で使いますか？",
+      options: ["相手が間違えた時", "相手の言葉を肯定する時", "驚いた時", "知らないと言う時"],
+      answer: 1,
+      explanation: "「はい、そうです。」＝是的，就是這樣。相手（あいて）の言葉（ことば）を肯定（こうてい）する時に使う。「はい、陳です。」のように具体的に答えることもできる。"
+    },
+    {
+      id: "q082", type: "choice", category: "grammar", source: "日文三大句型",
+      question: "「いいえ、ちがいます。」は何を否定する時に使いますか？",
+      options: ["相手の行動を否定する時", "自分の名前や身分を否定する時", "場所を否定する時", "時間を否定する時"],
+      answer: 1,
+      explanation: "「いいえ、ちがいます。」＝不，不是的。自分（じぶん）の名前（なまえ）や身分（みぶん）を問われた時の否定。「陳様ですか？」→「いいえ、ちがいます。」"
+    },
+
+    // TRUE/FALSE
+    {
+      id: "q083", type: "tf", category: "grammar", source: "い/な形容詞",
+      question: "い形容詞の否定形は「〜くないです」、な形容詞の否定形は「〜ではありません」を使う。",
+      answer: true,
+      explanation: "正しいです。い形容詞（例：大きい→大きくない）とな形容詞（例：静か→静かではありません）では否定形の作り方が異なります。"
+    },
+    {
+      id: "q084", type: "tf", category: "grammar", source: "い/な形容詞",
+      question: "「とても」は否定形と一緒に使う：「とても美味しくないです」は正しい。",
+      answer: false,
+      explanation: "間違いです。「とても」は肯定形（こうていけい）と使う。否定形と一緒に使う副詞は「あまり」（あまり美味しくないです）。「全然（ぜんぜん）」は「全然〜ない」で「完全不〜」の意味。"
+    },
+    {
+      id: "q085", type: "tf", category: "grammar", source: "います/あります",
+      question: "「犬や猫などの動物はいます、机や椅子などの物はあります」という使い分けは正しい。",
+      answer: true,
+      explanation: "正しいです。生き物（いきもの）・人（ひと）・動物（どうぶつ）：「います」。物（もの）・建物（たてもの）・場所（ばしょ）：「あります」。"
+    },
+    {
+      id: "q086", type: "tf", category: "grammar", source: "います/あります",
+      question: "「本屋はレストランの隣があります」は正しい日本語です。",
+      answer: false,
+      explanation: "間違いです。「本屋（ほんや）はレストランの隣（となり）にあります」が正しい。位置・場所（ばしょ）を表すには「に」を使う。「が」ではなく「に」。"
+    },
+    {
+      id: "q087", type: "tf", category: "grammar", source: "比較",
+      question: "「AはBよりより〜です」のように「より」を2回使うのは間違いです。",
+      answer: true,
+      explanation: "正しいです。「より」は一度だけ使う。「日本語（にほんご）は英語（えいご）より難しいです」が正しい。「より」は比較の助詞で、一文に一度だけ。"
+    },
+    {
+      id: "q088", type: "tf", category: "grammar", source: "比較",
+      question: "「どちらも好きです」は「AとBの両方（りょうほう）が好き」という意味です。",
+      answer: true,
+      explanation: "正しいです。「どちらも」＝「どちらも（両方）」。「コーヒーとジュースとどちらが好きですか。—どちらも好きです」＝コーヒーもジュースも好き。"
+    },
+    {
+      id: "q089", type: "tf", category: "grammar", source: "い/な形容詞",
+      question: "「そして」は逆接（但是）を表す接続詞です。",
+      answer: false,
+      explanation: "間違いです。「そして」は順接（じゅんせつ）・「而且、然後」。逆接（ぎゃくせつ・但是）は「が」「でも」「しかし」を使う。例：「美味しいですが、高いです」。"
+    },
+    {
+      id: "q090", type: "tf", category: "grammar", source: "日文三大句型",
+      question: "「〜様（さま）」は自分を指す時に使える尊称です。",
+      answer: false,
+      explanation: "間違いです。「〜様（さま）」は他人（たにん）に対する尊称。自分（じぶん）に使うのは間違い。「陳様ですか？」→「はい、陳（ちん）です。」（自分には様をつけない）"
+    },
+
+    // ORDER
+    {
+      id: "o010", type: "order", category: "grammar", source: "比較",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["より", "難しいです", "日本語は", "英語"],
+      answer_order: [2, 3, 0, 1],
+      correct_sentence: "日本語は英語より難しいです。",
+      explanation: "比較文（ひかくぶん）の語順（ごじゅん）：「AはBより〜です」。日本語（にほんご）は英語（えいご）より難しい（むずかしい）です＝日文比英文難。"
+    },
+    {
+      id: "o011", type: "order", category: "grammar", source: "い/な形容詞",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["猫が", "好きです", "私は"],
+      answer_order: [2, 0, 1],
+      correct_sentence: "私は猫が好きです。",
+      explanation: "「が」構文（こうぶん）：「私（わたし）は＋対象（たいしょう）が＋好き（すき）です」。好き・嫌い・上手・下手の前は「が」。"
+    },
+    {
+      id: "o012", type: "order", category: "grammar", source: "比較",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["一番美味しいですか", "日本料理の中で", "何が"],
+      answer_order: [1, 2, 0],
+      correct_sentence: "日本料理の中で何が一番美味しいですか。",
+      explanation: "最上級（さいじょうきゅう）文型：「〜の中（なか）で＋何が／誰が＋一番（いちばん）＋形容詞（けいようし）ですか」。在日本料理裡什麼最好吃？"
+    },
+    {
+      id: "o013", type: "order", category: "grammar", source: "比較",
+      question: "次の語句を並べ替えて正しい文を作ってください：",
+      parts: ["台北は", "よりずっと人が多いです", "斗六"],
+      answer_order: [0, 2, 1],
+      correct_sentence: "台北は斗六よりずっと人が多いです。",
+      explanation: "「ずっと」：比較の差が大きい時に使う。「台北（たいぺい）は斗六（とろく）よりずっと人（ひと）が多い（おおい）です」＝台北的人比斗六多很多。"
+    },
+
+    // COUNTER (量詞) cnt016-cnt025
+    {id:"cnt016",type:"counter",category:"counter",source:"助数詞",question:"りんご1個の正しい読み方は？",display:"りんご 1個",options:["いちこ","いっこ","ひとこ","いちご"],answer:1,explanation:"1個（いっこ）：「個（こ）」計算小さい丸い物品。1個→促音化「いっこ」。6個（ろっこ）・8個（はっこ）・10個（じゅっこ）も促音化。"},
+    {id:"cnt017",type:"counter",category:"counter",source:"助数詞",question:"りんご3個の正しい読み方は？",display:"りんご 3個",options:["みっこ","さんこ","さんご","みこ"],answer:1,explanation:"3個（さんこ）：「個（こ）」の数字3は音変なし「さんこ」。2個（にこ）・4個（よんこ）・5個（ごこ）も普通に読む。"},
+    {id:"cnt018",type:"counter",category:"counter",source:"助数詞",question:"手紙1通の正しい読み方は？",display:"てがみ 1通",options:["いちとう","いっつう","ひとつう","いちつ"],answer:1,explanation:"1通（いっつう）：「通（つう）」は手紙（てがみ）・メールなど文書（ぶんしょ）を数える。1通→促音化「いっつう」。"},
+    {id:"cnt019",type:"counter",category:"counter",source:"助数詞",question:"手紙3通の正しい読み方は？",display:"てがみ 3通",options:["みっつう","さんとう","さんつう","みつう"],answer:2,explanation:"3通（さんつう）：「通（つう）」の3は音変なし「さんつう」。"},
+    {id:"cnt020",type:"counter",category:"counter",source:"助数詞",question:"卵10個の正しい読み方は？",display:"たまご 10個",options:["じゅうこ","じゅっこ","とおこ","じゅうご"],answer:1,explanation:"10個（じゅっこ）：1・6・8・10個は促音化「いっこ・ろっこ・はっこ・じゅっこ」。たまごは卵（たまご）。"},
+    {id:"cnt021",type:"counter",category:"counter",source:"助数詞",question:"靴（くつ）2足の正しい読み方は？",display:"くつ 2足",options:["にそく","ふたあし","にあし","ふたそく"],answer:0,explanation:"2足（にそく）：「足（そく）」は靴（くつ）・靴下（くつした）など足に履くものを数える。読み方は比較的規則的。"},
+    {id:"cnt022",type:"counter",category:"counter",source:"助数詞",question:"4人の正しい読み方は？",display:"4人",options:["よにん","しにん","よったり","よんにん"],answer:0,explanation:"4人（よにん）：「四（し）」は「死（し）」に通じる忌み言葉のため、4は「よ」と読む。よにん・7人（しちにん）は注意。"},
+    {id:"cnt023",type:"counter",category:"counter",source:"助数詞",question:"水（みず）1杯の「杯」の正しい読み方は？",display:"みず 1杯",options:["いちはい","いっぱい","ひとはい","いちぱい"],answer:1,explanation:"1杯（いっぱい）：「杯（はい）」は飲み物・ご飯など容器（ようき）に入れたものを数える。1杯（いっぱい）・3杯（さんばい）・6杯（ろっぱい）。"},
+    {id:"cnt024",type:"counter",category:"counter",source:"助数詞",question:"2台の正しい読み方は？（機械・車など）",display:"2台",options:["ふただい","にたい","にだい","ふただい"],answer:2,explanation:"2台（にだい）：「台（だい）」は機械（きかい）・車（くるま）・テレビなどを数える。読み方は比較的規則的。"},
+    {id:"cnt025",type:"counter",category:"counter",source:"助数詞",question:"6本の正しい読み方は？（長いもの）",display:"6本",options:["ろくほん","むほん","ろっぽん","ろっほん"],answer:2,explanation:"6本（ろっぽん）：1・6・8・10本は「ぽん」（半濁音＋促音）。1本（いっぽん）・6本（ろっぽん）・8本（はっぽん）・10本（じゅっぽん）。"},
+
+    // ── 助詞 に/で/を/と/から 選択問題 ──────────────────────────
+    {
+      id: "q091", type: "choice", category: "grammar", source: "助詞",
+      question: "「図書館___勉強します。」→ 動作が行われる場所の助詞は？",
+      options: ["に", "で", "を", "が"],
+      answer: 1,
+      explanation: "「で」：動作（どうさ）が行われる場所（ばしょ）を表す。「図書館（としょかん）で勉強（べんきょう）します」＝在圖書館念書。「に」は存在（いる/ある）・目的地（行く）に使う。"
+    },
+    {
+      id: "q092", type: "choice", category: "grammar", source: "助詞",
+      question: "「東京___住んでいます。」→ 存在・居住の場所の助詞は？",
+      options: ["に", "で", "を", "へ"],
+      answer: 0,
+      explanation: "「に」：存在（そんざい）・居住（きょじゅう）の場所。「東京（とうきょう）に住む（すむ）」＝住在東京。「で」は動作の場所。「家（いえ）にいます」vs「家（いえ）で食（た）べます」の違いを覚えよう。"
+    },
+    {
+      id: "q093", type: "choice", category: "grammar", source: "助詞",
+      question: "「友達___映画を見ます。」→ 一緒に行動する相手の助詞は？",
+      options: ["に", "で", "と", "が"],
+      answer: 2,
+      explanation: "「と」：一緒（いっしょ）に行動する相手（あいて）を表す。「友達（ともだち）と映画（えいが）を見ます」＝和朋友看電影。「に」は目的地・相手（あう/おしえる）、「で」は場所・手段。"
+    },
+    {
+      id: "q094", type: "choice", category: "grammar", source: "助詞",
+      question: "「電車___学校に行きます。」→ 交通手段の助詞は？",
+      options: ["に", "で", "と", "を"],
+      answer: 1,
+      explanation: "「で」：手段（しゅだん）・方法（ほうほう）を表す。「電車（でんしゃ）で行く（いく）」＝搭電車去。「バスで・歩いて・車で」なども同様。「に乗る（のる）」は別の表現。"
+    },
+    {
+      id: "q095", type: "choice", category: "grammar", source: "助詞",
+      question: "「台北___東京まで飛行機で3時間かかります。」→ 出発点の助詞は？",
+      options: ["まで", "から", "で", "に"],
+      answer: 1,
+      explanation: "「から〜まで」：起点（きてん）から終点（しゅうてん）まで。「台北（たいぺい）から東京（とうきょう）まで」＝從台北到東京。「まで」が終点、「から」が起点。"
+    },
+    {
+      id: "q096", type: "choice", category: "grammar", source: "助詞",
+      question: "「毎朝コーヒー___飲みます。」→ 動詞の目的語（〜を〜する）の助詞は？",
+      options: ["が", "は", "を", "の"],
+      answer: 2,
+      explanation: "「を」：動詞（どうし）の目的語（もくてきご）を表す。「コーヒーを飲む（のむ）」＝喝咖啡。「食（た）べる・読む（よむ）・書く（かく）・見る（みる）」などの動詞の前は「を」。"
+    },
+    {
+      id: "q097", type: "choice", category: "grammar", source: "助詞",
+      question: "「友達___会いました。」→ 動詞「会う」の相手の助詞は？",
+      options: ["と", "に", "を", "が"],
+      answer: 1,
+      explanation: "「会う（あう）」「教える（おしえる）」「電話する（でんわする）」の相手は「に」を使う。「友達（ともだち）に会う（あう）」＝跟朋友見面。「と」は一緒に行動する時（友達と映画を見る）。"
+    },
+    {
+      id: "q098", type: "choice", category: "grammar", source: "助詞",
+      question: "「日曜日___パーティーがあります。」→ 時間の助詞は？",
+      options: ["で", "に", "は", "が"],
+      answer: 1,
+      explanation: "「に」：特定（とくてい）の時間（じかん）・日（ひ）・曜日（ようび）・時刻（じこく）に使う。「日曜日（にちようび）に」「3時（さんじ）に」「月曜日（げつようび）に」。ただし「毎日・今日・明日」などには「に」をつけない。"
+    },
+    {
+      id: "q099", type: "choice", category: "grammar", source: "助詞",
+      question: "「公園の中___歩きます。」→ 移動の経路（道・場所を通る）の助詞は？",
+      options: ["に", "で", "を", "から"],
+      answer: 2,
+      explanation: "「を」：移動（いどう）の経路（けいろ）・通過（つうか）する場所。「公園（こうえん）の中（なか）を歩く（あるく）」＝在公園裡走。「道（みち）を歩く」「橋（はし）を渡る（わたる）」なども同様。"
+    },
+    {
+      id: "q100", type: "choice", category: "grammar", source: "助詞",
+      question: "「日本語___上手になりたいです。」→ 能力向上の目標の助詞は？",
+      options: ["が", "に", "を", "は"],
+      answer: 1,
+      explanation: "「〜になる」の前は「に」を使う。「日本語（にほんご）が上手（じょうず）になる（なる）」＝「變得擅長日語」。「〜になりたい」は「想成為〜、想變得〜」。"
+    },
+    {
+      id: "q101", type: "choice", category: "grammar", source: "助詞",
+      question: "「バス___乗ります。」→ 乗り物に乗る時の助詞は？",
+      options: ["で", "を", "に", "が"],
+      answer: 2,
+      explanation: "「乗る（のる）」の乗り物の前は「に」。「バスに乗る（のる）」＝搭公車。「に乗る」は固定表現。「電車で行く」（電車是手段）と「電車に乗る」（電車是乗る的対象）の違いに注意。"
+    },
+    {
+      id: "q102", type: "choice", category: "grammar", source: "助詞",
+      question: "「先生___日本語を教えてもらいました。」→ 教える相手・動作の源の助詞は？",
+      options: ["と", "が", "に", "から"],
+      answer: 2,
+      explanation: "「教える（おしえる）・もらう・習う（ならう）」の相手・源（みなもと）は「に」。「先生（せんせい）に教えてもらう」＝請老師教我。「〜にもらう」「〜に習う」「〜に聞く（きく）」も同様。"
+    },
+    {
+      id: "q103", type: "choice", category: "grammar", source: "助詞",
+      question: "「家___出て、駅___歩いて、電車___乗りました。」→ 順に正しい助詞は？",
+      options: ["を・に・に", "に・を・に", "を・まで・で", "から・まで・に"],
+      answer: 0,
+      explanation: "「家（いえ）を出る（でる）」（通過・離れる）→「駅（えき）まで歩く（あるく）」→「電車（でんしゃ）に乗る（のる）」。「を出る」は離れる動作、「まで歩く」は終点、「に乗る」は乗り物固定表現。"
+    },
+
+    // ── 動詞グループ区別：見た目は一類だが実は二類 ──────────────────
+    {
+      id: "q104", type: "tf", category: "grammar", source: "動詞変化",
+      question: "「帰る（かえる）」は語尾が「る」だから一段動詞（グループ2）です。",
+      answer: false,
+      explanation: "間違いです。「帰る（かえる）」は五段動詞（ごだんどうし）・グループ1。「る」の前の音が「え段（え）」なのに例外。て形は「帰って（かえって）」。一段なら「帰て（かえて）」になるはずが、ならない。"
+    },
+    {
+      id: "q105", type: "tf", category: "grammar", source: "動詞変化",
+      question: "「走る（はしる）」は一段動詞（グループ2）で、て形は「走て（はして）」です。",
+      answer: false,
+      explanation: "間違いです。「走る（はしる）」は五段動詞（グループ1）。て形は「走って（はしって）」。同様に「知る（しる）→知って」「入る（はいる）→入って」「切る（きる）→切って」も五段動詞。"
+    },
+    {
+      id: "q106", type: "tf", category: "grammar", source: "動詞変化",
+      question: "「着る（きる・衣類を着る）」と「切る（きる・ハサミで切る）」は、同じグループの動詞です。",
+      answer: false,
+      explanation: "間違いです。「着る（きる）」は一段動詞（グループ2）→て形「着て（きて）」。「切る（きる）」は五段動詞（グループ1）→て形「切って（きって）」。同じ読み方でも全く異なるグループ。"
+    },
+
+    // ── 見た目グループ引っかけ：動詞変化 ───────────────────────────
+    {
+      id: "v062", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "帰る",
+      conjugation_type: "て形",
+      question: "「帰る（かえる）」のて形はどれですか？（グループに注意！）",
+      options: ["帰て", "帰って", "帰いて", "帰れて"],
+      answer: 1,
+      explanation: "「帰る（かえる）」は五段動詞（グループ1）。語尾「る」→「って」。て形：帰って（かえって）。見た目は一段動詞のようだが五段。同様：走る→走って、知る→知って、切る→切って。"
+    },
+    {
+      id: "v063", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "着る",
+      conjugation_type: "て形",
+      question: "「着る（きる・洋服を着る）」のて形はどれですか？",
+      options: ["着って", "着いて", "着て", "着れて"],
+      answer: 2,
+      explanation: "「着る（きる）」は一段動詞（グループ2）。語尾「る」だけ取って「て」をつける：着て（きて）。「切る（きる・ハサミ）」は五段→切って（きって）。同じ読みでも全く違う！"
+    },
+    {
+      id: "v064", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "知る",
+      conjugation_type: "て形",
+      question: "「知る（しる）」のて形はどれですか？（グループに注意！）",
+      options: ["知て", "知いて", "知って", "知れて"],
+      answer: 2,
+      explanation: "「知る（しる）」は五段動詞（グループ1）。語尾「る」→「って」（促音化）。て形：知って（しって）。「知っています（しっています）」が「知っている状態」の正しい形。"
+    },
+    {
+      id: "v065", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "入る",
+      conjugation_type: "て形",
+      question: "「入る（はいる）」のて形はどれですか？",
+      options: ["入て", "入いて", "入って", "入れて"],
+      answer: 2,
+      explanation: "「入る（はいる）」は五段動詞（グループ1）。語尾「る」→「って」。て形：入って（はいって）。「お風呂（ふろ）に入って（はいって）ください」＝請進浴缸。"
+    },
+    {
+      id: "v066", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "借りる",
+      conjugation_type: "て形",
+      question: "「借りる（かりる）」のて形はどれですか？",
+      options: ["借って", "借いて", "借りて", "借れて"],
+      answer: 2,
+      explanation: "「借りる（かりる）」は一段動詞（グループ2）。語尾「る」だけ取って「て」：借りて（かりて）。同様：「降りる（おりる）→降りて」「足りる（たりる）→足りて」。"
+    },
+    {
+      id: "v067", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "走る",
+      conjugation_type: "ない形",
+      question: "「走る（はしる）」のない形はどれですか？",
+      options: ["走れない", "走りない", "走らない", "走くない"],
+      answer: 2,
+      explanation: "「走る（はしる）」は五段動詞（グループ1）。ない形：語尾「る」→「ら」（あ段）＋ない。走らない（はしらない）。同様：帰らない（かえらない）・知らない（しらない）・切らない（きらない）。"
+    },
+    {
+      id: "v068", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "起きる",
+      conjugation_type: "ない形",
+      question: "「起きる（おきる）」のない形はどれですか？",
+      options: ["起からない", "起きない", "起かない", "起こない"],
+      answer: 1,
+      explanation: "「起きる（おきる）」は一段動詞（グループ2）。ない形：語尾「る」だけ取って「ない」：起きない（おきない）。見た目が「る前がい段」→一段動詞の正しい例。"
+    },
+    {
+      id: "v069", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "帰る",
+      conjugation_type: "ない形",
+      question: "「帰る（かえる）」のない形はどれですか？（グループに注意！）",
+      options: ["帰ない", "帰れない", "帰らない", "帰いない"],
+      answer: 2,
+      explanation: "「帰る（かえる）」は五段動詞（グループ1）。ない形：「る」→「ら」（あ段）＋ない＝帰らない（かえらない）。もし一段動詞なら「帰ない」になるはずだが、それは間違い。"
+    },
+    {
+      id: "v070", type: "conjugation", category: "grammar", source: "動詞変化",
+      verb: "着る",
+      conjugation_type: "ない形",
+      question: "「着る（きる・洋服を着る）」のない形はどれですか？",
+      options: ["着らない", "着かない", "着ない", "着くない"],
+      answer: 2,
+      explanation: "「着る（きる）」は一段動詞（グループ2）。ない形：「る」→「ない」＝着ない（きない）。「切る（きる）」は五段→切らない（きらない）。同じ読みでも全然違う！"
+    },
   ]
 };
 
@@ -1830,6 +2336,8 @@ let typeScore = { fill:{c:0,t:0}, choice:{c:0,t:0}, tf:{c:0,t:0}, conjugation:{c
 let orderPlaced = [];
 let orderAvailable = [];
 let sessionResults = [];
+
+let selectedTypes = new Set(['fill','choice','tf','conjugation','order','counter']);
 
 let starred = new Set(JSON.parse(localStorage.getItem('jq_starred') || '[]'));
 let todayStats = JSON.parse(localStorage.getItem('jq_today') || '{"date":"","correct":0,"total":0}');
@@ -1881,7 +2389,8 @@ function setCount(n) {
 }
 
 function updateStartBtn() {
-  const total = allQuestions.length;
+  const filtered = allQuestions.filter(q => selectedTypes.has(q.type));
+  const total = filtered.length;
   const n = quizCount === 0 ? total : Math.min(quizCount, total);
   document.getElementById('startBtn').textContent = `開始練習`;
 }
@@ -1903,9 +2412,24 @@ function switchPage(name) {
 // ═══════════════════════════════════════════
 // QUIZ FLOW
 // ═══════════════════════════════════════════
+function toggleType(type) {
+  if (selectedTypes.has(type)) {
+    if (selectedTypes.size === 1) return; // 至少保留一個
+    selectedTypes.delete(type);
+  } else {
+    selectedTypes.add(type);
+  }
+  document.querySelectorAll('.type-card[data-type]').forEach(card => {
+    const t = card.dataset.type;
+    card.classList.toggle('sel', selectedTypes.has(t));
+    card.classList.toggle('off', !selectedTypes.has(t));
+  });
+  updateStartBtn();
+}
+
 function startQuiz() {
-  const qs = [...allQuestions];
-  if (!qs.length) { showToast('沒有題目'); return; }
+  const qs = [...allQuestions].filter(q => selectedTypes.has(q.type));
+  if (!qs.length) { showToast('請選擇至少一種題型'); return; }
   const n = quizCount === 0 ? qs.length : Math.min(quizCount, qs.length);
   deck = shuffle([...qs]).slice(0, n);
   currentIdx = 0;
