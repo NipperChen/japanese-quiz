@@ -9,66 +9,62 @@
 <meta name="theme-color" content="#000000">
 <title>日文練習</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --orange:#FF9A5C;--orange-bg:rgba(255,154,92,.13);--orange-border:rgba(255,154,92,.3);
-  --green:#34D399;--green-bg:rgba(52,211,153,.13);
-  --red:#F87171;--red-bg:rgba(248,113,113,.13);
-  --blue:#818CF8;--blue-bg:rgba(129,140,248,.13);
-  --purple:#C084FC;--purple-bg:rgba(192,132,252,.13);
-  --cyan:#38BDF8;--cyan-bg:rgba(56,189,248,.13);
-  --amber:#FCD34D;--amber-bg:rgba(252,211,77,.13);
-  --text:#F9FAFB;--text2:#9CA3AF;--muted:#6B7280;
-  --gray:#1F2937;--gray2:#374151;--card-bg:#111827;--bg:#030712;
+  --orange:#C8703A;--orange-bg:rgba(200,112,58,.14);--orange-border:rgba(200,112,58,.3);
+  --green:#3DB887;--green-bg:rgba(61,184,135,.13);
+  --red:#E06060;--red-bg:rgba(224,96,96,.13);
+  --blue:#7B82D4;--blue-bg:rgba(123,130,212,.13);
+  --purple:#A875D4;--purple-bg:rgba(168,117,212,.13);
+  --cyan:#3BAEC8;--cyan-bg:rgba(59,174,200,.13);
+  --amber:#C89A3A;--amber-bg:rgba(200,154,58,.13);
+  --text:#F0EDE8;--text2:#9A9590;--muted:#635E59;
+  --gray:#221F1C;--gray2:#332E29;--card-bg:#1A1714;--bg:#0E0C0A;
   --nav-h:64px;--safe-b:env(safe-area-inset-bottom)
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--text)}
-body{min-height:100dvh;background:var(--bg)}
+html{background:var(--bg);font-family:'Shippori Mincho',serif;color:var(--text)}
+body{height:100dvh;overflow:hidden;background:var(--bg)}
 
-.page{display:none;min-height:100dvh;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 8px)}
-.page.active{display:block}
+.page{display:none;height:100dvh;overflow:hidden}
+.page.active{display:flex;flex-direction:column}
+.page:not(#page-home):not(#page-quiz).active{display:block;height:auto;min-height:100dvh;overflow:visible}
+#page-quiz.active{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
 
 /* NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:rgba(17,24,39,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--gray2);display:flex;padding-bottom:var(--safe-b);z-index:200}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:rgba(14,12,10,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--gray2);display:flex;padding-bottom:var(--safe-b);z-index:200}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;font-size:11px;color:var(--muted);font-family:inherit;cursor:pointer;padding:8px 0}
 .nav-btn.active{color:var(--orange)}
 .nav-icon{width:24px;height:24px;display:block}
 
 /* HOME */
-.home-header{background:var(--card-bg);padding:52px 20px 20px;border-bottom:1px solid var(--gray2)}
-.home-title{font-size:26px;font-weight:700;line-height:1.2}
-.home-title span{color:var(--orange)}
-.home-subtitle{font-size:13px;color:var(--muted);margin-top:4px}
-.home-body{padding:16px 16px 0}
-.stats-row{display:flex;gap:10px;margin-bottom:16px}
-.stat-card{flex:1;background:var(--card-bg);border-radius:14px;padding:14px 12px;border:1px solid var(--gray2)}
-.stat-num{font-size:26px;font-weight:700;line-height:1}
+.home-header{background:radial-gradient(ellipse 120% 160% at 50% -20%, rgba(160,100,40,.45) 0%, transparent 65%), var(--bg);padding:calc(env(safe-area-inset-top,0px) + 32px) 20px 20px;flex-shrink:0}
+.home-title{font-size:17px;font-weight:500;font-family:'Shippori Mincho',serif;line-height:1.2;color:var(--text);text-align:center}
+.home-title span{color:var(--text)}
+.home-body{padding:12px 16px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.stats-row{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0}
+.stat-card{flex:1;background:var(--card-bg);border-radius:14px;padding:10px 12px;border:1px solid var(--gray2)}
+.stat-num{font-size:22px;font-weight:700;line-height:1}
 .stat-num.orange{color:var(--orange)}.stat-num.green{color:var(--green)}
-.stat-label{font-size:11px;color:var(--muted);margin-top:3px}
-.section-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+.section-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
 
 /* COUNT CHIPS */
-.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.count-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:7px 16px;font-size:13px;font-weight:500;color:var(--text2);background:var(--card-bg);cursor:pointer;transition:all .15s;white-space:nowrap}
+.count-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;flex-shrink:0}
+.count-chip{border:1.5px solid var(--gray2);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:500;color:var(--text2);background:var(--card-bg);cursor:pointer;transition:all .15s;white-space:nowrap}
 .count-chip.sel{background:var(--orange-bg);color:var(--orange);border-color:var(--orange)}
 
-.start-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:16px;padding:16px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(255,154,92,.35);letter-spacing:.03em}
+.start-btn{width:100%;background:var(--gray2);color:var(--text);border:none;border-radius:16px;padding:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s;letter-spacing:.03em;flex-shrink:0}
 .start-btn:active{transform:scale(.97)}
-.meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px);flex-shrink:0}
 .meta-info{font-size:11px;color:var(--muted)}
 
 /* TYPE BREAKDOWN CARDS */
-.type-breakdown{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-.type-card{display:flex;align-items:center;gap:12px;border-radius:14px;padding:13px 16px;border:1px solid var(--gray2)}
-.type-card-fill{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(255,154,92,.1) 100%)}
-.type-card-choice{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(129,140,248,.1) 100%)}
-.type-card-tf{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(52,211,153,.1) 100%)}
-.type-card-conj{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(192,132,252,.1) 100%)}
-.type-card-order{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(56,189,248,.1) 100%)}
-.type-card-counter{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(252,211,77,.1) 100%)}
-.type-icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.type-breakdown{margin-top:10px;display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden}
+.type-card{display:flex;align-items:center;gap:10px;border-radius:12px;padding:9px 14px;border:1px solid var(--gray2);flex-shrink:0}
+.type-card-fill,.type-card-choice,.type-card-tf,.type-card-conj,.type-card-order,.type-card-counter{background:var(--card-bg)}
+.type-icon-wrap{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .fill-icon{background:rgba(255,154,92,.18);color:var(--orange)}
 .choice-icon{background:rgba(129,140,248,.18);color:var(--blue)}
 .tf-icon{background:rgba(52,211,153,.18);color:var(--green)}
@@ -88,7 +84,10 @@ body{min-height:100dvh;background:var(--bg)}
 .quiz-star.starred{color:var(--amber)}
 .progress-wrap{height:3px;background:var(--gray2)}
 .progress-fill{height:3px;background:var(--orange);transition:width .4s}
-.quiz-body{padding:16px}
+.quiz-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.q-upper{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column}
+.q-upper .q-card{flex:1;display:flex;flex-direction:column;justify-content:center}
+.q-lower{padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 16px);border-top:1px solid var(--gray2);background:var(--bg);flex-shrink:0;overflow-y:auto;max-height:60dvh}
 .q-badges{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .q-type-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
 .badge-type-fill{background:var(--orange-bg);color:var(--orange)}
@@ -99,8 +98,15 @@ body{min-height:100dvh;background:var(--bg)}
 .badge-type-counter{background:var(--amber-bg);color:var(--amber)}
 .q-source{font-size:11px;color:var(--muted);padding:3px 9px;background:var(--gray);border-radius:99px}
 .q-card{background:var(--card-bg);border-radius:18px;padding:20px;border:1px solid var(--gray2);margin-bottom:16px}
+.q-card-fill{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(255,154,92,.12) 100%);border-color:rgba(255,154,92,.2)}
+.q-card-choice{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(129,140,248,.12) 100%);border-color:rgba(129,140,248,.2)}
+.q-card-tf{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(52,211,153,.12) 100%);border-color:rgba(52,211,153,.2)}
+.q-card-conj{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(192,132,252,.12) 100%);border-color:rgba(192,132,252,.2)}
+.q-card-order{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(56,189,248,.12) 100%);border-color:rgba(56,189,248,.2)}
+.q-card-counter{background:linear-gradient(to bottom,var(--card-bg) 0%,rgba(252,211,77,.12) 100%);border-color:rgba(252,211,77,.2)}
 .q-category{font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
 .q-text{font-size:17px;font-weight:500;line-height:1.6;color:var(--text)}
+.q-card-tf .q-text{font-size:20px;line-height:1.75}
 .q-sentence{font-size:18px;font-weight:600;line-height:1.7;margin-top:8px;color:var(--text)}
 .blank{display:inline-block;min-width:52px;height:26px;border-bottom:2.5px solid var(--orange);text-align:center;vertical-align:middle;font-size:16px;font-weight:700;color:var(--orange);line-height:26px}
 .blank.filled{border-color:transparent;background:var(--orange-bg);border-radius:6px;padding:0 6px}
@@ -126,10 +132,11 @@ body{min-height:100dvh;background:var(--bg)}
 .choice-opt.reveal{border-color:var(--green);background:var(--green-bg)}
 .choice-opt.reveal .choice-letter{color:var(--green)}
 .choice-opt.locked{cursor:default}
+.tf-prompt{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:12px;text-align:center}
 .tf-row{display:flex;gap:12px}
-.tf-btn{flex:1;border:2px solid var(--gray2);border-radius:16px;padding:20px 10px;font-size:32px;text-align:center;cursor:pointer;background:var(--card-bg);font-family:inherit;transition:all .15s}
+.tf-btn{flex:1;border:2px solid var(--gray2);border-radius:20px;padding:24px 10px;font-size:40px;text-align:center;cursor:pointer;background:var(--card-bg);font-family:inherit;transition:all .15s}
 .tf-btn:active:not(.locked){transform:scale(.95)}
-.tf-label{font-size:13px;font-weight:600;color:var(--muted);display:block;margin-top:4px}
+.tf-label{font-size:14px;font-weight:700;color:var(--muted);display:block;margin-top:6px;letter-spacing:.05em}
 .tf-btn.selected-t,.tf-btn.selected-f{border-color:var(--orange);background:var(--orange-bg)}
 .tf-btn.selected-t .tf-label,.tf-btn.selected-f .tf-label{color:var(--orange)}
 .tf-btn.correct{border-color:var(--green);background:var(--green-bg)}
@@ -147,10 +154,12 @@ body{min-height:100dvh;background:var(--bg)}
 .feedback-icon{font-size:20px}
 .feedback-result{font-size:15px;font-weight:700}
 .feedback-result.ok{color:var(--green)}.feedback-result.ng{color:var(--red)}
-.feedback-explain{font-size:13px;line-height:1.65;color:var(--text2);white-space:pre-line}
-.next-btn{width:100%;background:var(--gray);color:var(--text);border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;transition:transform .15s}
+.feedback-explain{font-size:13px;line-height:1.9;color:var(--text2);white-space:pre-line}
+ruby{ruby-align:center}
+rt{font-size:.55em;color:var(--muted);letter-spacing:0}
+.next-btn{width:100%;background:var(--gray2);color:var(--text);border:none;border-radius:16px;padding:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:14px;transition:transform .15s}
 .next-btn:active{transform:scale(.97)}
-.next-btn.orange-btn{background:var(--orange);color:#fff}
+.next-btn.orange-btn{background:var(--gray2);color:var(--text)}
 
 /* COMPLETE */
 .complete-wrap{padding:52px 20px 24px;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
@@ -171,7 +180,7 @@ body{min-height:100dvh;background:var(--bg)}
 .btn-secondary{background:var(--gray);color:var(--text)}
 
 /* FAVORITES */
-.fav-header{padding:52px 20px 16px;background:var(--card-bg);border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100}
+.fav-header{padding:52px 20px 16px;background:var(--card-bg);border-bottom:1px solid var(--gray2);position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:flex-end}
 .fav-title{font-size:22px;font-weight:700}
 .fav-subtitle{font-size:13px;color:var(--muted);margin-top:2px}
 .fav-body{padding:16px}
@@ -205,7 +214,7 @@ body{min-height:100dvh;background:var(--bg)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* CONJUGATION / COUNTER DISPLAY */
-.conj-display{background:var(--gray);border-radius:16px;padding:18px 20px 14px;text-align:center;margin-top:12px}
+.conj-display{background:var(--purple-bg);border-radius:16px;padding:18px 20px 14px;text-align:center;margin-top:12px;border:1px solid rgba(168,117,212,.15)}
 .conj-verb{font-size:36px;font-weight:700;color:var(--text);line-height:1.2}
 .conj-arrow{font-size:13px;color:var(--muted);margin:6px 0 2px}
 .conj-label{font-size:15px;font-weight:700;color:var(--orange);background:var(--gray2);border-radius:99px;display:inline-block;padding:4px 16px;margin-top:2px}
@@ -244,7 +253,6 @@ body{min-height:100dvh;background:var(--bg)}
 <div class="page active" id="page-home">
   <div class="home-header">
     <div class="home-title">日文<span>練習</span></div>
-    <div class="home-subtitle">根據你的 Notion 課堂筆記出題</div>
   </div>
   <div class="home-body">
     <div class="stats-row">
@@ -271,11 +279,6 @@ body{min-height:100dvh;background:var(--bg)}
     </div>
 
     <button class="start-btn" id="startBtn" onclick="startQuiz()">開始練習</button>
-
-    <div class="meta-row">
-      <div class="meta-info" id="metaInfo">載入中…</div>
-      <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">建議功能</button>
-    </div>
 
     <div class="type-breakdown" id="typeBreakdown">
       <div class="type-card type-card-fill">
@@ -309,7 +312,10 @@ body{min-height:100dvh;background:var(--bg)}
         <div class="type-count-num" id="countCounter">—</div>
       </div>
     </div>
-    <div style="height:16px"></div>
+    <div class="meta-row">
+      <div class="meta-info" id="metaInfo">載入中…</div>
+      <button onclick="openSuggest()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit">建議功能</button>
+    </div>
   </div>
 </div>
 
@@ -344,7 +350,6 @@ body{min-height:100dvh;background:var(--bg)}
     <div class="complete-breakdown" id="completeBreakdown"></div>
     <div class="complete-btns">
       <button class="complete-btn btn-primary" onclick="restartQuiz()">再練習一輪</button>
-      <button class="complete-btn btn-secondary" onclick="openExport()">匯出記錄</button>
       <button class="complete-btn btn-secondary" onclick="switchPage('home')">返回首頁</button>
     </div>
   </div>
@@ -367,8 +372,14 @@ body{min-height:100dvh;background:var(--bg)}
 <!-- FAVORITES PAGE -->
 <div class="page" id="page-fav">
   <div class="fav-header">
-    <div class="fav-title">收藏的題目</div>
-    <div class="fav-subtitle" id="favSubtitle">0 題</div>
+    <div>
+      <div class="fav-title">收藏的題目</div>
+      <div class="fav-subtitle" id="favSubtitle">0 題</div>
+    </div>
+    <button onclick="openExport()" style="background:var(--gray2);border:none;border-radius:10px;padding:7px 13px;font-size:13px;font-weight:600;color:var(--text2);font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:5px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      匯出記錄
+    </button>
   </div>
   <div class="fav-body" id="favBody"></div>
 </div>
@@ -1924,19 +1935,20 @@ function renderQuestion() {
 
   const typeBadge = { fill:'填空', choice:'選擇', tf:'是非', conjugation:'動詞変化', order:'排序', counter:'量詞' }[q.type] || q.type;
   const typeClass = { fill:'badge-type-fill', choice:'badge-type-choice', tf:'badge-type-tf', conjugation:'badge-type-conj', order:'badge-type-order', counter:'badge-type-counter' }[q.type] || '';
+  const cardGrad = { fill:'q-card-fill', choice:'q-card-choice', tf:'q-card-tf', conjugation:'q-card-conj', order:'q-card-order', counter:'q-card-counter' }[q.type] || '';
 
   let answerHTML = '';
   if (q.type === 'fill') {
-    const sentenceHTML = q.sentence.replace('___', `<span class="blank" id="blankSpan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
+    const sentenceHTML = furigana(q.sentence).replace('___', `<span class="blank" id="blankSpan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
     answerHTML = `<div class="q-sentence">${sentenceHTML}</div>`;
   } else if (q.type === 'conjugation') {
     answerHTML = `<div class="conj-display">
-      <div class="conj-verb">${q.verb}</div>
+      <div class="conj-verb">${furigana(q.verb)}</div>
       <div class="conj-arrow">↓ 請選出正確的「${q.conjugation_type}」</div>
     </div>`;
   } else if (q.type === 'counter') {
     answerHTML = `<div class="conj-display" style="background:var(--amber-bg)">
-      <div class="conj-verb">${q.display}</div>
+      <div class="conj-verb">${furigana(q.display)}</div>
       <div class="conj-arrow">↓ 正確的讀法是？</div>
     </div>`;
   }
@@ -1944,7 +1956,7 @@ function renderQuestion() {
   let optionsHTML = '';
   if (q.type === 'fill' || q.type === 'conjugation' || q.type === 'counter') {
     optionsHTML = `<div class="chip-grid" id="optionArea">
-      ${q.options.map((o,i) => `<button class="chip-opt" data-idx="${i}" onclick="submitAnswer(${i})">${o}</button>`).join('')}
+      ${q.options.map((o,i) => `<button class="chip-opt" data-idx="${i}" onclick="submitAnswer(${i})">${furigana(o)}</button>`).join('')}
     </div>`;
   } else if (q.type === 'choice') {
     const letters = ['A','B','C','D'];
@@ -1952,18 +1964,20 @@ function renderQuestion() {
       ${q.options.map((o,i) => `
         <button class="choice-opt" data-idx="${i}" onclick="submitAnswer(${i})">
           <span class="choice-letter">${letters[i]}</span>
-          <span>${o}</span>
+          <span>${furigana(o)}</span>
         </button>`).join('')}
     </div>`;
   } else if (q.type === 'tf') {
-    optionsHTML = `<div class="tf-row" id="optionArea">
-      <button class="tf-btn" data-idx="true" onclick="submitTF(true)">
-        ○<span class="tf-label">正確</span>
-      </button>
-      <button class="tf-btn" data-idx="false" onclick="submitTF(false)">
-        ×<span class="tf-label">錯誤</span>
-      </button>
-    </div>`;
+    optionsHTML = `
+      <div class="tf-prompt">請判斷以下說法是否正確</div>
+      <div class="tf-row" id="optionArea">
+        <button class="tf-btn" data-idx="true" onclick="submitTF(true)">
+          ○<span class="tf-label">正確</span>
+        </button>
+        <button class="tf-btn" data-idx="false" onclick="submitTF(false)">
+          ×<span class="tf-label">錯誤</span>
+        </button>
+      </div>`;
   } else if (q.type === 'order') {
     orderPlaced = [];
     orderAvailable = shuffle(q.parts.map((_,i) => i));
@@ -1975,24 +1989,28 @@ function renderQuestion() {
   }
 
   document.getElementById('quizBody').innerHTML = `
-    <div class="q-badges">
-      <span class="q-type-badge ${typeClass}">${typeBadge}</span>
-      <span class="q-source">${q.source || ''}</span>
-    </div>
-    <div class="q-card">
-      <div class="q-text">${q.question}</div>
-      ${answerHTML}
-    </div>
-    ${optionsHTML}
-    <div class="feedback-card" id="feedbackCard">
-      <div class="feedback-top">
-        <span class="feedback-icon" id="fbIcon"></span>
-        <span class="feedback-result" id="fbResult"></span>
+    <div class="q-upper">
+      <div class="q-badges">
+        <span class="q-type-badge ${typeClass}">${typeBadge}</span>
+        <span class="q-source">${q.source || ''}</span>
       </div>
-      <div class="feedback-explain" id="fbExplain"></div>
-      <button class="next-btn orange-btn" onclick="nextQuestion()">
-        ${currentIdx + 1 < deck.length ? '下一題 →' : '查看成績 →'}
-      </button>
+      <div class="q-card ${cardGrad}">
+        <div class="q-text">${furigana(q.question)}</div>
+        ${answerHTML}
+      </div>
+    </div>
+    <div class="q-lower">
+      ${optionsHTML}
+      <div class="feedback-card" id="feedbackCard">
+        <div class="feedback-top">
+          <span class="feedback-icon" id="fbIcon"></span>
+          <span class="feedback-result" id="fbResult"></span>
+        </div>
+        <div class="feedback-explain" id="fbExplain"></div>
+        <button class="next-btn orange-btn" onclick="nextQuestion()">
+          ${currentIdx + 1 < deck.length ? '下一題 →' : '查看成績 →'}
+        </button>
+      </div>
     </div>
   `;
   if (q.type === 'order') renderOrderUI(q);
@@ -2099,8 +2117,8 @@ function showFeedback(correct, explanation) {
   const res = document.getElementById('fbResult');
   res.textContent = correct ? '正確！' : '答錯了';
   res.className = 'feedback-result ' + (correct ? 'ok' : 'ng');
-  document.getElementById('fbExplain').textContent = explanation || '';
-  setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+  document.getElementById('fbExplain').innerHTML = furigana(explanation || '');
+  setTimeout(() => { const lower = document.querySelector('.q-lower'); if(lower) lower.scrollTop = 0; }, 100);
 }
 
 function nextQuestion() {
@@ -2338,6 +2356,14 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
 }
+// Convert "漢字（よみ）" or "漢字(よみ)" patterns → <ruby> HTML
+function furigana(text) {
+  if (!text) return '';
+  return text
+    .replace(/([^\s（\(、。，,！？!?「」『』【】\s]+)[（\(]([ぁ-んァ-ヶー・]+)[）\)]/g,
+      (_, kanji, reading) => `<ruby>${kanji}<rt>${reading}</rt></ruby>`);
+}
+
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
